@@ -2,6 +2,10 @@
 import cv2
 import numpy as np
 import time
+import matplotlib
+import datetime
+matplotlib.use('TkAgg')  # or 'Qt5Agg'
+import matplotlib.pyplot as plt
 
 def find_camera():
     for i in range(0, 10):
@@ -31,5 +35,25 @@ while True:
         cv2.imwrite("screenshot.jpg", frame)
         time.sleep(.1)
         print("Green" if np.sum(green_mask) > np.sum(red_mask) else "Red")
+        start_time = datetime.datetime.now()  # Get the start time of the cycle
+        
+        
+        # img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        plt.imshow(img)
+        plt.pause(0.001)  # Pause to update the plot
+        plt.draw()
+        time.sleep(0.01)
+        end_time = datetime.datetime.now()  # Get the end time of the cycle
+        time_difference = end_time - start_time  # Calculate the time difference
+        print(f"Time between cycles: {time_difference.total_seconds()} seconds")
+        
+        # cap.release()
+        # Display the image using matplotlib
+        # img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # plt.imshow(img)
+        # plt.pause(0.001)  # Pause to update the plot
+        # plt.draw()
+        # time.sleep(1)
+
 
 cap.release()
