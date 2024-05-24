@@ -2,7 +2,7 @@
 #include <Servo.h>
 
 #define TRIGGER_PIN  2  // Arduino pin tied to trigger pin on the ultrasonic sensor.
-#define ECHO_PIN     6  // Arduino pin tied to echo pin on the ultrasonic sensor.
+// #define ECHO_PIN     6  // Arduino pin tied to echo pin on the ultrasonic sensor.
 #define MAX_DISTANCE 300 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 
 int enA = 3;
@@ -16,6 +16,7 @@ long result2;
 
 NewPing sonar1(TRIGGER_PIN, 6, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 NewPing sonar2(TRIGGER_PIN, 7, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+NewPing sonar3(TRIGGER_PIN, 8, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
 Servo myservo;
 
@@ -48,11 +49,20 @@ void loop() {
     // digitalWrite(in1, LOW); 
     // digitalWrite(in2, HIGH); 
     // for (int i = 0; i < 50; i++) {
-    int left = sonar1.ping_cm();
-    if (left != 0){
-    myservo.write(map(sonar1.ping_cm(), 80, 0, 75, 165));
-    Serial.println(sonar1.ping_cm());
-    }
+    // int left = sonar1.ping_cm();
+    // int right = sonar2.ping_cm();
+    // if (left > 0){
+    //   myservo.write(map(sonar1.ping_cm(), 60, 0, 75, 90));
+    //   // Serial.println(sonar1.ping_cm());
+    // }
+    // if (left < 0){
+    //   myservo.write(map(sonar2.ping_cm(), 0, -60, 90, 165));
+    // }
+    Serial.print(sonar1.ping_cm());
+    Serial.print(" ");
+    Serial.print(sonar2.ping_cm());
+    Serial.print(" ");
+    Serial.println(sonar3.ping_cm());
       //   delay(50);
       // }
     // delay(3000);
