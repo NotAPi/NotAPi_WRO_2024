@@ -27,3 +27,25 @@ Hemos realizado numerosas modificaciones al vehículo original, incluida la impr
 
 7. Impresión General de los Jueces
 Nuestra documentación en GitHub está bien organizada y completa, lo que facilita la comprensión de nuestro diseño y proceso de desarrollo. La comunicación clara y detallada asegura que nuestros esfuerzos puedan ser fácilmente replicados por otros equipos.
+
+
+________________________________________________________
+
+
+1. Mobility Management Component Selection and Implementation: We have utilized three ultrasonic sensors for obstacle detection, positioned one on each side and one at the front of the vehicle. For traction, we have incorporated a high-performance direct current motor. Front-wheel drive is achieved through a configuration of drive wheels. The base vehicle is an RC car with dimensions of 15 x 8 cm, to which we have made numerous modifications to adapt it to our needs.
+
+Usage of Controller and Microcontroller: The motor controller used is the L298N, which provides us with the ability to control the speed and direction of the traction motor. For processing sensor information and system control, we have opted for the Arduino R4. This microcontroller gives us the necessary flexibility to implement advanced control algorithms.
+
+Vehicle Customization: The original vehicle has been significantly modified by adding a 3D-printed base. This base provides structural support and housing for additional electronic components. Additionally, we have integrated a mini servo for steering control, allowing for precise maneuverability in challenging situations.
+
+Power Source: The vehicle is powered by a 2-cell LiPo battery, which offers an optimal combination of capacity and energy density. This choice provides us with adequate autonomy to conduct planned tests and challenges.
+
+2. Obstacle Management Navigation Strategy: Our navigation strategy is based on information collected by the ultrasonic sensors. We utilize obstacle avoidance algorithms to make quick and safe decisions in dynamic environments. Control logic is implemented in the Arduino R4, which processes sensor data and generates commands for the motor controller and steering servo.
+
+3. Utilization of GitHub: We have created a repository on GitHub named "NotAPi_WRO_2024" where we document our progress, including source code, CAD designs, and meeting logs. We make regular commits to maintain a version history and facilitate collaboration among team members.
+
+4. Project Media in the "Pictures" Folder: Photos of the project and a performance video are available in the "Pictures" folder.
+
+5. Engineering Factor: We have made numerous modifications to the original vehicle, including 3D printing supports for components and integrating new control systems. Our customized engineering approach has allowed us to adapt the vehicle to our specific needs and maximize its performance in the challenge.
+
+6. Overall Judges' Impression: Our documentation on GitHub is well-organized and comprehensive, facilitating understanding of our design and development process. Clear and detailed communication ensures that our efforts can be easily replicated by other teams.
