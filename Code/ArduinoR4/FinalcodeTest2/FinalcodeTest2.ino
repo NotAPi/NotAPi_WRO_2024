@@ -17,8 +17,6 @@ NewPing sonar3(13, 8, MAX_DISTANCE); // NewPing setup of pins and maximum distan
 
 Servo myservo;
 
-int sentido = 0; //horario = 0, antiorario = 1
-
 void setup() {
   Serial.begin(115200);
   myservo.attach(9);
@@ -60,9 +58,6 @@ void setup() {
     return medida;
   }
 
- 
-
-
 void loop() {
   delay(50);    
 
@@ -73,6 +68,9 @@ void loop() {
   int right = Right();
   int front = Center();  
   
+  Serial.print(left);
+  Serial.print(" ");
+  Serial.println(right);
 
   if (front < 80 && front != 0 ) {
     // Stop the car
@@ -80,13 +78,18 @@ void loop() {
     digitalWrite(in2, LOW); 
     delay(1000);
     // Compare the two sides
-    if (Left() > Right() && (Left()<299 || Right()<299) ) {
-      myservo.write(75); //left
-      sentido = 1; // antihorario
-          delay(1000);
+    if (Left() > Right()) {
+      Serial.println("left");
+      myservo.write(75);
+    } else if (Right() > Left()) {
+
+      Serial.println("right");
+      myservo.write(165);
+    }
+    delay(1000);
   digitalWrite(in1, LOW); 
   digitalWrite(in2, HIGH);
-  delay(975);
+  delay(1075);
   digitalWrite(in1, HIGH); 
   digitalWrite(in2, LOW);
   delay(5);
@@ -94,50 +97,6 @@ void loop() {
   digitalWrite(in1, LOW); 
   digitalWrite(in2, HIGH);
   delay(1000);
-    } else if (Right() > Left() && (Left()<299 || Right()<299)) {
-      myservo.write(165); //right
-      sentido = 0; // horario
-          delay(1000);
-  digitalWrite(in1, LOW); 
-  digitalWrite(in2, HIGH);
-  delay(975);
-  digitalWrite(in1, HIGH); 
-  digitalWrite(in2, LOW);
-  delay(5);
-  myservo.write(120);
-  digitalWrite(in1, LOW); 
-  digitalWrite(in2, HIGH);
-  delay(1000);
-    }
-
-if( sentido = 0){ // horario
-  digitalWrite(in1, LOW); 
-  digitalWrite(in2, HIGH); 
-
-    if(Left() < 40){
-      myservo.write(160);
-    }
-    if(Left() > 40){
-      myservo.write(70);
-    }
-
-}
-
-if( sentido = 1){ // horario
-  digitalWrite(in1, LOW); 
-  digitalWrite(in2, HIGH); 
-
-    if(Right() < 40){
-      myservo.write(70);
-    }
-    if(Right() > 40){
-      myservo.write(160);
-    }
-
-}
-
-
-
 
 
   }
