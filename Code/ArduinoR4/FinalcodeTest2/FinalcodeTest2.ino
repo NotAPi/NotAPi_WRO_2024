@@ -72,7 +72,7 @@ void loop() {
   Serial.print(" ");
   Serial.println(right);
 
-  if (front < 80 && front != 0 ) {
+  if (front < 70 && front != 0 ) {
     // Stop the car
     digitalWrite(in1, LOW); 
     digitalWrite(in2, LOW); 
@@ -89,7 +89,7 @@ void loop() {
     delay(1000);
   digitalWrite(in1, LOW); 
   digitalWrite(in2, HIGH);
-  delay(1075);
+  delay(1100);
   digitalWrite(in1, HIGH); 
   digitalWrite(in2, LOW);
   delay(5);
