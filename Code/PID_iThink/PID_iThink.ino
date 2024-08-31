@@ -4,6 +4,12 @@
 #include <WiFiS3.h>
 #include <ArduinoOTA.h>
 
+#define SECRET_SSID "My wife-eye"
+#define SECRET_PASS "pegoku08"
+
+char ssid[] = SECRET_SSID;    
+char pass[] = SECRET_PASS;    
+int status = WL_IDLE_STATUS;  
 
 // Pin definitions
 #define TRIGGER_PIN1  3
@@ -68,23 +74,40 @@ void setup() {
   // Serial Communication
   Serial.begin(9600);
 
-  // Connect to WiFi
-  WiFi.begin("My wife-eye", "pegoku08");
-  while (WiFi.status() != WL_CONNECTED) {
-      delay(1000);
-      Serial.println("Connecting to WiFi...");
-      Serial.println(random(1,3));
+  // check for the WiFi module:
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("Communication with WiFi module failed!");
+    // don't continue
+    while (true)
+      ;
   }
-  Serial.print("Connected ");
-  Serial.println(WiFi.localIP());
 
-  // Start OTA
-  ArduinoOTA.begin(WiFi.localIP(), "arduino", "password", InternalStorage);
-  
+  // attempt to connect to WiFi network:
+  while (status != WL_CONNECTED) {
+    Serial.print("Attempting to connect to WPA SSID: ");
+    Serial.println(ssid);
+    // Connect to WPA/WPA2 network:
+    status = WiFi.begin(ssid, pass);
+
+    // wait 10 second for connection:
+    delay(10000);
+  }
+
+  // start the WiFi OTA library with internal (flash) based storage
+  // The IDE will prompt for this password during upload
+  ArduinoOTA.begin(WiFi.localIP(), "Arduino", "password", InternalStorage);
+
+  // you're connected now, so print out the status:
+  printWifiStatus();
 }
 
 void loop() {
+
+  // OTA
+  printWifiStatus();  //sign of life
+  // check for WiFi OTA updates
   ArduinoOTA.poll();
+
   if (sonarFront.ping_cm() < 10 && sonarFront.ping_cm() != 0) {
     stop();
     return;
@@ -143,4 +166,21 @@ void loop() {
 
   delay(100); // Delay for stability
   }
+}
+
+void printWifiStatus() {
+  // print the SSID of the network you're attached to:
+  Serial.print("SSID: ");
+  Serial.println(WiFi.SSID());
+
+  // print your WiFi shield's IP address:
+  IPAddress ip = WiFi.localIP();
+  Serial.print("IP Address: ");
+  Serial.println(ip);
+
+  // print the received signal strength:
+  long rssi = WiFi.RSSI();
+  Serial.print("signal strength (RSSI):");
+  Serial.print(rssi);
+  Serial.println(" dBm");
 }
