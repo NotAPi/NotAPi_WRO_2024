@@ -35,7 +35,7 @@ Servo myservo;
 #define SERVO_PIN 11
 
 int centro = 110; // para que vaya recto 
-int miligiro = 700; // cuantos milisegundo está con el motor prendido en amboos giros
+int miligiro = 600; // cuantos milisegundo está con el motor prendido en amboos giros
 int distanciafreno = 70; // a que distancia en cm se para respecto la pared de delante xd
 
 NewPing sonarRight(TRIGGER_PIN1, ECHO_PIN1, MaxDistance);
@@ -145,12 +145,12 @@ void loop() {
 
   if (frontDistance > distanciafreno) {
     myservo.write(centro);
-    forward(255);
+    forward(200);
     }
   
   else if (frontDistance < distanciafreno){
     forceStop();
-    if (getAverageFrontDistance(5) < distanciafreno){    
+    if (getAverageFrontDistance(50) < distanciafreno){    
       stop();
       delay(1000);
       if (leftDistance > rightDistance){
