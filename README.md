@@ -49,3 +49,53 @@ Power Source: The vehicle is powered by a 2-cell LiPo battery, which offers an o
 5. Engineering Factor: We have made numerous modifications to the original vehicle, including 3D printing supports for components and integrating new control systems. Our customized engineering approach has allowed us to adapt the vehicle to our specific needs and maximize its performance in the challenge.
 
 6. Overall Judges' Impression: Our documentation on GitHub is well-organized and comprehensive, facilitating understanding of our design and development process. Clear and detailed communication ensures that our efforts can be easily replicated by other teams.
+
+markdown
+# NotaPi Autonomous Car Project
+
+## Overview
+This project is focused on developing a small autonomous car based on the K989 drift car model. Our team, NotaPi, has been working on this since January, and the main goal is to create a vehicle that can navigate through a course while avoiding obstacles using a combination of sensors and machine vision.
+
+### Specifications
+- **Base Car Model**: K989 Drift Car
+- **Dimensions**: 15 cm x 8 cm
+- **Modifications**:
+  - Removed original electronics, except for the motor.
+  - Replaced the servo with a custom setup.
+  - Added a 3D-printed base for mounting components.
+
+### Components
+- **Arduino R4 WiFi**: Controls and processes data from sensors.
+- **Raspberry Pi**: Manages camera input and obstacle detection.
+- **Voltage Regulators**:
+  - 5V for the Arduino and other peripherals.
+  - 6V for the motor control.
+- **L298N Motor Driver**: Controls the car's single motor.
+- **Ultrasonic Sensors**: Three sensors are used to detect obstacles and ensure safe navigation.
+- **Camera**: Mounted at the front, controlled by the Raspberry Pi, to identify green and red obstacles.
+
+### Functionality
+The autonomous car is programmed to:
+- Avoid green and red block obstacles.
+- Navigate a predefined course with walls.
+- Use ultrasonic sensors for proximity detection.
+- Leverage the Raspberry Pi's camera for visual obstacle recognition.
+
+### Assembly and Setup
+1. Mount the Arduino R4 WiFi and the Raspberry Pi on the 3D-printed base.
+2. Connect the motor to the L298N motor driver.
+3. Wire the ultrasonic sensors to the Arduino.
+4. Install the camera on the front and link it to the Raspberry Pi.
+5. Set up the voltage regulators (5V and 6V) for proper power distribution.
+
+### Installation and Dependencies
+1. Install the necessary libraries for Arduino (e.g., NewPing for ultrasonic sensors).
+2. Set up the Raspberry Pi for camera control and obstacle detection.
+3. Upload the code to the Arduino and Raspberry Pi.
+4. Calibrate the sensors and motor control based on the environment.
+
+### Usage
+Once everything is set up and powered, place the car on the track. The car will automatically detect and avoid obstacles while following the path.
+
+## Team
+NotaPi
