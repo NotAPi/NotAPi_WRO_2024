@@ -24,9 +24,9 @@ Servo steeringServo;
 #define SERVO_PIN 11
 
 // PID constants
-float Kp = 0.8;
-float Ki = 0.2;
-float Kd = 0.6;
+float Kp = 0.0;
+float Ki = 0.0;
+float Kd = 0.0;
 
 // PID variables
 float previousError = 0;
@@ -69,7 +69,7 @@ void setup() {
   Serial.begin(9600);
 
   // Connect to WiFi
-  WiFi.begin("My wife-eye", "pegoku08");
+  /*WiFi.begin("My wife-eye", "pegoku08");
   while (WiFi.status() != WL_CONNECTED) {
       delay(1000);
       Serial.println("Connecting to WiFi...");
@@ -80,7 +80,7 @@ void setup() {
 
   // Start OTA
   ArduinoOTA.begin(WiFi.localIP(), "arduino", "password", InternalStorage);
-  
+  */
 }
 
 void loop() {

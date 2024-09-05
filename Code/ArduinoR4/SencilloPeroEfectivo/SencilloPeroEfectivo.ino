@@ -79,7 +79,7 @@ int getDistance(NewPing &sonar) {
 void giroIzquierda(){
   myservo.write(160);
   delay(500);
-  forward(250);
+  forward(255);
   delay(miligiro);
   stop();
 }
@@ -87,7 +87,7 @@ void giroIzquierda(){
 void giroDerecha(){
   myservo.write(80);
   delay(500);
-  forward(250);
+  forward(255);
   delay(miligiro);
   stop();
 }
@@ -125,7 +125,7 @@ void loop() {
     if (getAverageFrontDistance(5) > distanciafreno){
     myservo.write(centro);
     delay(10);
-    forward(150);
+    forward(255);
     }
   }
   else if (frontDistance < 100) {
