@@ -1,0 +1,32 @@
+# Cuaderno de Ingeniería: Proyecto de Coche Autónomo - NotaPi
+
+## Introducción
+Desde enero, el equipo NotaPi ha estado desarrollando un coche autónomo basado en el modelo de coche de drift K989. El objetivo de este proyecto es diseñar un vehículo capaz de navegar de forma autónoma a través de un circuito con obstáculos y paredes, utilizando sensores ultrasónicos y visión por computadora.
+
+### Diseño del Coche
+El coche autónomo mide aproximadamente 15 cm de largo por 8 cm de ancho, basado en el coche K989, al cual se le ha modificado completamente su sistema electrónico, conservando únicamente el motor. El servo ha sido reemplazado por uno nuevo y se ha creado una base de componentes mediante modelos 3D.
+
+### Componentes Utilizados
+1. **Arduino R4 WiFi**: Responsable de gestionar los datos de los sensores y las decisiones de movimiento.
+2. **Raspberry Pi**: Encargada de la visión artificial, controlando una cámara que detecta obstáculos de colores específicos (verde y rojo).
+3. **Sensores Ultrasónicos**: Se han colocado tres sensores ultrasónicos que proporcionan información sobre la proximidad de obstáculos en el entorno.
+4. **Placa L298N**: Permite el control del motor del coche, brindando una interfaz para ajustar la velocidad y dirección del vehículo.
+5. **Reguladores de Voltaje**: Se han instalado dos reguladores, uno de 5V para la alimentación del Arduino y los sensores, y otro de 6V para el motor.
+6. **Cámara**: La cámara está montada en la parte delantera del coche, sobre una estructura elevada. Es utilizada por la Raspberry Pi para reconocer obstáculos y enviar información al sistema.
+
+### Funcionamiento del Sistema
+El coche está diseñado para moverse de manera autónoma por un circuito con varios bloques de colores (obstáculos). El coche detecta la proximidad de los obstáculos con los sensores ultrasónicos y los esquiva. Además, la Raspberry Pi, mediante la cámara, detecta obstáculos de colores verde y rojo, permitiendo una mayor precisión en la navegación.
+
+### Desarrollo del Software
+El software se ha dividido en dos secciones principales:
+- **Control del Motor**: Usando la placa L298N, el Arduino controla la velocidad y dirección del coche, basándose en la información de los sensores.
+- **Detección de Obstáculos con Cámara**: La Raspberry Pi se encarga de procesar la imagen de la cámara y distinguir los colores verde y rojo, ajustando la ruta del coche para esquivar estos obstáculos.
+
+### Resultados Esperados
+Se espera que el coche sea capaz de:
+- Navegar de manera autónoma a través de un circuito.
+- Esquivar obstáculos tanto físicos como detectados por la cámara.
+- Mantener una velocidad controlada sin perder precisión en sus movimientos.
+
+## Conclusión
+El proyecto ha avanzado significativamente desde su inicio en enero, y con las modificaciones hechas al coche, se espera que el sistema funcione de manera óptima en pruebas reales.
