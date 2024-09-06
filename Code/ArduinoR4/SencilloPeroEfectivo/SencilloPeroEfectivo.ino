@@ -20,8 +20,8 @@ Servo myservo;
 #define SERVO_PIN 11
 
 int centro = 110;
-int miligiro = 500;
-int distanciafreno = 50;
+int miligiro = 725;
+int distanciafreno = 80;
 
 NewPing sonarRight(TRIGGER_PIN1, ECHO_PIN1, MaxDistance);
 NewPing sonarFront(TRIGGER_PIN2, ECHO_PIN2, MaxDistance);
@@ -79,7 +79,7 @@ int getDistance(NewPing &sonar) {
 void giroIzquierda(){
   myservo.write(160);
   delay(500);
-  forward(255);
+  forward(200);
   delay(miligiro);
   stop();
 }
@@ -87,7 +87,7 @@ void giroIzquierda(){
 void giroDerecha(){
   myservo.write(80);
   delay(500);
-  forward(255);
+  forward(200);
   delay(miligiro);
   stop();
 }
@@ -125,7 +125,7 @@ void loop() {
     if (getAverageFrontDistance(5) > distanciafreno){
     myservo.write(centro);
     delay(10);
-    forward(255);
+    forward(200);
     }
   }
   else if (frontDistance < 100) {
