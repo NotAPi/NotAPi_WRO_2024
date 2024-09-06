@@ -50,11 +50,10 @@ Power Source: The vehicle is powered by a 2-cell LiPo battery, which offers an o
 
 6. Overall Judges' Impression: Our documentation on GitHub is well-organized and comprehensive, facilitating understanding of our design and development process. Clear and detailed communication ensures that our efforts can be easily replicated by other teams.
 
-markdown
-# NotaPi Autonomous Car Project
+# NotAPi Autonomous Car Project
 
 ## Overview
-This project is focused on developing a small autonomous car based on the K989 drift car model. Our team, NotaPi, has been working on this since January, and the main goal is to create a vehicle that can navigate through a course while avoiding obstacles using a combination of sensors and machine vision.
+This project is focused on developing a small autonomous car based on the K989 drift car model. Our team, NotAPi, has been working on this since January, and the main goal is to create a vehicle that can navigate through a course while avoiding obstacles using a combination of sensors and machine vision.
 
 ### Specifications
 - **Base Car Model**: K989 Drift Car
@@ -98,4 +97,4 @@ The autonomous car is programmed to:
 Once everything is set up and powered, place the car on the track. The car will automatically detect and avoid obstacles while following the path.
 
 ## Team
-NotaPi
+NotAPi
