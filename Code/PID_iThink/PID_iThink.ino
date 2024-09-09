@@ -148,7 +148,7 @@ void loop() {
 
   // Always move forward
   forward();
-''
+
   // Set the servo to the new constrained angle
   steeringServo.write(newServoAngle);
 

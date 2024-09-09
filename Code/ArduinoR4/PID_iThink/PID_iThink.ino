@@ -28,11 +28,14 @@
 // Servo Control
 Servo steeringServo;
 #define SERVO_PIN 11
-#define mid 120
+#define mid 109
+#define min 80
+#define max mid + (mid - min)
+
 // PID constants
-float Kp = 0.9;
-float Ki = 0.0;
-float Kd = 0.0;
+float Kp = 0.45;
+float Ki = 0.30;
+float Kd = 0.5;
 
 // PID variables
 float previousError = 0;
@@ -66,13 +69,16 @@ void setup() {
   pinMode(IN1_PIN, OUTPUT);
   pinMode(IN2_PIN, OUTPUT);
   pinMode(ENABLE_PIN, OUTPUT);
-  stop();
+
+  digitalWrite(IN1_PIN, LOW);
+  digitalWrite(IN2_PIN, LOW);
+  analogWrite(ENABLE_PIN, 0);
 
   // Servo Control (120 mid)
 
   steeringServo.attach(SERVO_PIN);
   steeringServo.write(mid);
-
+  delay(100);
   // Serial Communication
   Serial.begin(9600);
 
@@ -113,12 +119,12 @@ void loop() {
     stop();
     return;
   } else if (sonarRight.ping_cm() == 0) {
-    steeringServo.write(80);
+    steeringServo.write(min);
     delay(750);
     forward();
     return;
   } else if (sonarLeft.ping_cm() == 0) {
-    steeringServo.write(160);
+    steeringServo.write(max);
     delay(750);
     forward();
     return;
@@ -144,7 +150,7 @@ void loop() {
   float newServoAngle = mid + output;
 
   // Constrain the servo angle to be within 80 to 160 degrees
-  newServoAngle = constrain(newServoAngle, 80, 164);
+  newServoAngle = constrain(newServoAngle, min, max);
 
   // Always move forward
   forward();
@@ -171,19 +177,19 @@ void loop() {
   }
 }
 
-void printWifiStatus() {
-  // print the SSID of the network you're attached to:
-  Serial.print("SSID: ");
-  Serial.println(WiFi.SSID());
+// void printWifiStatus() {
+//   // print the SSID of the network you're attached to:
+//   // Serial.print("SSID: ");
+//   // Serial.println(WiFi.SSID());
 
-  // print your WiFi shield's IP address:
-  IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);
+//   // print your WiFi shield's IP address:
+//   // IPAddress ip = WiFi.localIP();
+//   // Serial.print("IP Address: ");
+//   // // Serial.println(ip);
 
-  // print the received signal strength:
-  long rssi = WiFi.RSSI();
-  Serial.print("signal strength (RSSI):");
-  Serial.print(rssi);
-  Serial.println(" dBm");
-}
+//   // // print the received signal strength:
+//   // long rssi = WiFi.RSSI();
+//   // Serial.print("signal strength (RSSI):");
+//   // Serial.print(rssi);
+//   // Serial.println(" dBm");
+// }
