@@ -1,6 +1,6 @@
 #include <Servo.h>
 Servo servoMotor;
-char buff[5]; //Var which will help us differentiate the start and end of information
+char buff[5];
 
 // Motor Control Pins
 #define IN1_PIN       9
@@ -28,8 +28,8 @@ void bk(sp) {
 
 
 void setup(){
-  Serial.begin(115200); //Baud rate == 115200
-  // Motor Control
+  Serial.begin(115200);
+  
   pinMode(IN1_PIN, OUTPUT);
   pinMode(IN2_PIN, OUTPUT);
   pinMode(ENABLE_PIN, OUTPUT);
