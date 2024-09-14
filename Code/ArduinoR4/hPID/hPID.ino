@@ -32,7 +32,7 @@ NewPing sonarFront(TRIGGER_PIN2, ECHO_PIN2, MaxDistance);
 NewPing sonarLeft(TRIGGER_PIN3, ECHO_PIN3, MaxDistance);
 
 void forward() {
-  analogWrite(ENABLE_PIN, 200);
+  analogWrite(ENABLE_PIN, 250);
   digitalWrite(IN1_PIN, HIGH);
   digitalWrite(IN2_PIN, LOW);
 }

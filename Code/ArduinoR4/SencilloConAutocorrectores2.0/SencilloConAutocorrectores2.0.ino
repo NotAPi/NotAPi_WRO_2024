@@ -39,13 +39,14 @@ int miligiroDERECHA = 950; // cuantos milisegundo está con el motor prendido en
 int miligiroIZQUIERDA = 650; // cuantos milisegundo está con el motor prendido en amboos giros
 
 int distanciafreno = 70; // a que distancia en cm se para respecto la pared de delante xd
-int distanciarevision = 150;
+int distanciarevision = 200;
 
 NewPing sonarRight(TRIGGER_PIN1, ECHO_PIN1, MaxDistance);
 NewPing sonarFront(TRIGGER_PIN2, ECHO_PIN2, MaxDistance);
 NewPing sonarLeft(TRIGGER_PIN3, ECHO_PIN3, MaxDistance);
 
 void forward(int vel) {
+  myservo.write(centro);
   analogWrite(ENABLE_PIN, vel);
   digitalWrite(IN1_PIN, HIGH);
   digitalWrite(IN2_PIN, LOW);
@@ -130,12 +131,13 @@ int getAverageFrontDistance(int numReadings) {
   // Calcular el promedio de las lecturas
   int averageDistance = sum / numReadings;
   
+  Serial.println(averageDistance);
   return averageDistance;
 }
 
 int getAverageDerechaDistance(int numReadings){
   int sum = 0;
-  
+
   // Tomar múltiples lecturas y acumularlas
   for (int i = 0; i < numReadings; i++) {
     int distance = getDistance(sonarRight);
@@ -145,7 +147,7 @@ int getAverageDerechaDistance(int numReadings){
 
   // Calcular el promedio de las lecturas
   int averageDistance = sum / numReadings;
-  
+  Serial.println(averageDistance);
   return averageDistance;
 }
 
@@ -161,7 +163,8 @@ int getAverageIzquierdaDistance(int numReadings) {
 
   // Calcular el promedio de las lecturas
   int averageDistance = sum / numReadings;
-  
+
+  Serial.println(averageDistance);
   return averageDistance;
 }
 
@@ -170,27 +173,36 @@ void loop() {
   int frontDistance = getDistance(sonarFront);
   int rightDistance = getDistance(sonarRight);
 
-  Serial.print(leftDistance);
+
+ // Serial.print(leftDistance);
   Serial.print("  ");
   Serial.print(frontDistance);
-  Serial.print("  ");
-  Serial.println(rightDistance);
+  Serial.println("  ");
+ // Serial.println(rightDistance);
 
 
 
-  if (frontDistance > distanciafreno or frontDistance > distanciarevision) {
+  if ((frontDistance > distanciafreno) and (frontDistance > distanciarevision)) {
     myservo.write(centro);
     forward(200);
     }
-  else if (frontDistance < distanciarevision){
+  else if ((frontDistance < distanciarevision) and (frontDistance > distanciafreno)){
     stop();
     if (getAverageFrontDistance(50) < distanciarevision){    
       stop();
       delay(1000);
       int distanciahorizontal = getAverageDerechaDistance(50) + getAverageIzquierdaDistance(50);
+      Serial.print("distanciahorizontal   ");
+      Serial.println(distanciahorizontal);
+      delay(1500);
       if (distanciahorizontal < 120 and distanciahorizontal > 40){
-        int diferencia = getAverageDerechaDistance(50) - getAverageIzquierdaDistance(50) ;
-        constrain(map(diferencia, -2, 2, -10, 10), -2, 2);
+        int diferencia = getAverageDerechaDistance(50) - getAverageIzquierdaDistance(50);
+        diferencia = constrain(diferencia, -20, 20);
+        centro = centro + diferencia;
+        Serial.print("CENTRO:  ");
+        Serial.println(centro);
+        myservo.write(centro);
+        delay(1500);
       }
     }
   }
