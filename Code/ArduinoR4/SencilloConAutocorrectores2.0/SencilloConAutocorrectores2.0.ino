@@ -186,15 +186,12 @@ void loop() {
     myservo.write(centro);
     forward(200);
     }
-  else if ((frontDistance < distanciarevision) and (frontDistance > distanciafreno)){
-    stop();
+  else if ((frontDistance < 70) and (frontDistance > 60)){
     if (getAverageFrontDistance(50) < distanciarevision){    
       stop();
-      delay(1000);
       int distanciahorizontal = getAverageDerechaDistance(50) + getAverageIzquierdaDistance(50);
       Serial.print("distanciahorizontal   ");
       Serial.println(distanciahorizontal);
-      delay(1500);
       if (distanciahorizontal < 120 and distanciahorizontal > 40){
         int diferencia = getAverageDerechaDistance(50) - getAverageIzquierdaDistance(50);
         diferencia = constrain(diferencia, -20, 20);
@@ -203,7 +200,11 @@ void loop() {
         Serial.println(centro);
         myservo.write(centro);
         forward(200);
-        delay(500);
+        delay(100);
+      }
+      else{
+        forward(200);
+        delay(100);
       }
     }
   }
