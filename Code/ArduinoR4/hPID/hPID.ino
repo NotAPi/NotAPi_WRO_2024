@@ -44,7 +44,7 @@ void stop() {
 }
 
 void giroIzquierda(){
-  steeringServo.write(min);
+  steeringServo.write(max);
   delay(500);
   forward();
   delay(miligiro);
@@ -52,7 +52,7 @@ void giroIzquierda(){
 }
 
 void giroDerecha(){
-  steeringServo.write(max);
+  steeringServo.write(min);
   delay(500);
   forward();
   delay(miligiro);
@@ -100,11 +100,8 @@ void loop() {
     if (sonarLeft.ping_cm() > sonarRight.ping_cm()){
       giroIzquierda();
     }
-    else if (sonarLeft.ping_cm() < sonarRight.ping_cm()){
+    else (sonarLeft.ping_cm() < sonarRight.ping_cm()){
       giroDerecha();
-    }
-    else{
-      giroIzquierda();
     }
   }
 
