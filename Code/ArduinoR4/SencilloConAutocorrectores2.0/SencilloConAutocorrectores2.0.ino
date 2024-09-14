@@ -202,7 +202,8 @@ void loop() {
         Serial.print("CENTRO:  ");
         Serial.println(centro);
         myservo.write(centro);
-        delay(1500);
+        forward(200);
+        delay(500);
       }
     }
   }

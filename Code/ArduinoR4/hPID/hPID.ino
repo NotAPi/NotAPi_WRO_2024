@@ -99,8 +99,7 @@ void loop() {
     delay(1000);
     if (sonarLeft.ping_cm() > sonarRight.ping_cm()){
       giroIzquierda();
-    }
-    else (sonarLeft.ping_cm() < sonarRight.ping_cm()){
+    } else if (sonarLeft.ping_cm() < sonarRight.ping_cm()) {
       giroDerecha();
     }
   }
