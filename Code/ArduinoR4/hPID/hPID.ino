@@ -94,7 +94,7 @@ void loop() {
     }
   }
 
-  if (sonarFront.ping_cm() < 110) {
+  if (sonarFront.ping_cm() < 100) {
     stop();
     delay(1000);
     if (sonarLeft.ping_cm() > sonarRight.ping_cm()){
