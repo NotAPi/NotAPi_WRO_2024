@@ -34,8 +34,10 @@ int MaxDistance = 300;
 Servo myservo;
 #define SERVO_PIN 11
 
-int centro = 110; // para que vaya recto 
-int miligiro = 600; // cuantos milisegundo está con el motor prendido en amboos giros
+int centro = 107 ;// para que vaya recto 
+int miligiroDERECHA = 950; // cuantos milisegundo está con el motor prendido en amboos giros
+int miligiroIZQUIERDA = 650; // cuantos milisegundo está con el motor prendido en amboos giros
+
 int distanciafreno = 70; // a que distancia en cm se para respecto la pared de delante xd
 
 NewPing sonarRight(TRIGGER_PIN1, ECHO_PIN1, MaxDistance);
@@ -95,7 +97,7 @@ void giroIzquierda(){
   myservo.write(160);
   delay(500);
   forward(255);
-  delay(miligiro);
+  delay(miligiroIZQUIERDA);
   stop();
 }
 
@@ -103,7 +105,7 @@ void giroDerecha(){
   myservo.write(80);
   delay(500);
   forward(255);
-  delay(miligiro);
+  delay(miligiroDERECHA);
   stop();
 }
 
