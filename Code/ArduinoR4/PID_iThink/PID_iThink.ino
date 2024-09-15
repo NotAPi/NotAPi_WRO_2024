@@ -1,6 +1,13 @@
 #include <NewPing.h>
 #include <Servo.h> // Include the Servo library
 
+// Ku = 0.5
+// Tu = 2
+
+// Kp = 0.6 * 0.5 = 0.3
+// Ki = 2 * 0.3 / 2 = 0.3
+// Kd = 0.3 * 2 / 8 = 0.075 
+
 // #include <WiFiS3.h>
 // #include <ArduinoOTA.h>
 
@@ -29,22 +36,23 @@
 Servo steeringServo;
 #define SERVO_PIN 11
 #define mid 109
-#define min 80
-#define max mid + (mid - min)
+#define max 80
+#define min mid + (mid - max) // 138
 
 // PID constants
-float Kp = 0.45;
-float Ki = 0.30;
-float Kd = 0.5;
+// kp = 0.5
+float Kp = 0.5;
+float Ki = 0.0;
+float Kd = 0.15;
 
 // PID variables
 float previousError = 0;
 float integral = 0;
 
 // Sensor Setup
-NewPing sonarRight(TRIGGER_PIN1, ECHO_PIN1, MaxDistance);
+NewPing sonarLeft(TRIGGER_PIN1, ECHO_PIN1, MaxDistance);
 NewPing sonarFront(TRIGGER_PIN2, ECHO_PIN2, MaxDistance);
-NewPing sonarLeft(TRIGGER_PIN3, ECHO_PIN3, MaxDistance);
+NewPing sonarRight(TRIGGER_PIN3, ECHO_PIN3, MaxDistance);
 
 void forward() {
   analogWrite(ENABLE_PIN, 200);
@@ -109,27 +117,27 @@ void setup() {
 }
 
 void loop() {
-
+float maxOut=0;
   // // OTA
   // printWifiStatus();  //sign of life
   // // check for WiFi OTA updates
   // ArduinoOTA.poll();
 
-  if (sonarFront.ping_cm() < 10 && sonarFront.ping_cm() != 0) {
-    stop();
-    return;
-  } else if (sonarRight.ping_cm() == 0) {
-    steeringServo.write(min);
-    delay(750);
-    forward();
-    return;
-  } else if (sonarLeft.ping_cm() == 0) {
-    steeringServo.write(max);
-    delay(750);
-    forward();
-    return;
-  } else
-  {
+  // if (sonarFront.ping_cm() < 10 && sonarFront.ping_cm() != 0) {
+  //   stop();
+  //   return;
+  // } else if (sonarRight.ping_cm() == 0) {
+  //   steeringServo.write(min);
+  //   delay(750);
+  //   forward();
+  //   return;
+  // } else if (sonarLeft.ping_cm() == 0) {
+  //   steeringServo.write(max);
+  //   delay(750);
+  //   forward();
+  //   return;
+  // } else
+  // {
   
   int distanceRight = sonarRight.ping_cm();
   int distanceLeft = sonarLeft.ping_cm();
@@ -149,8 +157,14 @@ void loop() {
   // Calculate the new servo angle
   float newServoAngle = mid + output;
 
-  // Constrain the servo angle to be within 80 to 160 degrees
-  newServoAngle = constrain(newServoAngle, min, max);
+  if (newServoAngle > maxOut) {
+    maxOut = newServoAngle;
+  }
+  Serial.print("MaxAngle: ");
+  Serial.println(maxOut);
+
+  // Constrain the servo angle to be within max to min degrees
+  newServoAngle = constrain(newServoAngle, max, min);
 
   // Always move forward
   forward();
@@ -174,7 +188,7 @@ void loop() {
   Serial.println(newServoAngle);
 
   delay(100); // Delay for stability
-  }
+  // }
 }
 
 // void printWifiStatus() {
