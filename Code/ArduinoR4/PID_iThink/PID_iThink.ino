@@ -55,7 +55,7 @@ NewPing sonarFront(TRIGGER_PIN2, ECHO_PIN2, MaxDistance);
 NewPing sonarRight(TRIGGER_PIN3, ECHO_PIN3, MaxDistance);
 
 void forward() {
-  analogWrite(ENABLE_PIN, 200);
+  analogWrite(ENABLE_PIN, 170);
   digitalWrite(IN1_PIN, HIGH);
   digitalWrite(IN2_PIN, LOW);
 }
@@ -70,6 +70,12 @@ void stop() {
   digitalWrite(IN1_PIN, LOW);
   digitalWrite(IN2_PIN, LOW);
   analogWrite(ENABLE_PIN, 0);
+}
+
+void backward() {
+  digitalWrite(IN1_PIN, LOW);
+  digitalWrite(IN2_PIN, HIGH);
+  analogWrite(ENABLE_PIN, 170);
 }
 
 void setup() {
@@ -117,30 +123,27 @@ void setup() {
 }
 
 void loop() {
-float maxOut=0;
-  // // OTA
-  // printWifiStatus();  //sign of life
-  // // check for WiFi OTA updates
-  // ArduinoOTA.poll();
+  float maxOut = 0;
 
-  // if (sonarFront.ping_cm() < 10 && sonarFront.ping_cm() != 0) {
-  //   stop();
-  //   return;
-  // } else if (sonarRight.ping_cm() == 0) {
-  //   steeringServo.write(min);
-  //   delay(750);
-  //   forward();
-  //   return;
-  // } else if (sonarLeft.ping_cm() == 0) {
-  //   steeringServo.write(max);
-  //   delay(750);
-  //   forward();
-  //   return;
-  // } else
-  // {
-  
+  int distanceFront = sonarFront.ping_cm();
   int distanceRight = sonarRight.ping_cm();
   int distanceLeft = sonarLeft.ping_cm();
+
+  // Check if an obstacle is detected in front
+  if (distanceFront < 10 && distanceFront != 0) {
+    // Move backward
+    backward();
+    delay(1000); // Move backward for 1 second
+    stop();
+
+    // Turn right
+    steeringServo.write(min);
+    delay(750);
+    forward();
+    delay(1000); // Move forward for 1 second to complete the turn
+    stop();
+    return;
+  }
 
   // Calculate error (difference between left and right distances)
   float error = distanceLeft - distanceRight;
@@ -188,7 +191,6 @@ float maxOut=0;
   Serial.println(newServoAngle);
 
   delay(100); // Delay for stability
-  // }
 }
 
 // void printWifiStatus() {

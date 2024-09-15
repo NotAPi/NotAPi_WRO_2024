@@ -43,19 +43,19 @@ int MaxDistance = 300;
 Servo myservo;
 #define SERVO_PIN 11
 #define mid 109
-#define min 80
-#define max mid + (mid - min)
+#define max 80
+#define min mid + (mid - max)
 
 int centro = mid ;// para que vaya recto 
-int miligiroDERECHA = 750; // cuantos milisegundo está con el motor prendido en amboos giros
-int miligiroIZQUIERDA = 550; // cuantos milisegundo está con el motor prendido en amboos giros
+int miligiroDERECHA = 620; // cuantos milisegundo está con el motor prendido en amboos giros
+int miligiroIZQUIERDA = 600; // cuantos milisegundo está con el motor prendido en amboos giros
 int miligiroREPO = 500;
-int distanciafreno = 70; // a que distancia en cm se para respecto la pared de delante xd
+int distanciafreno = 40; // a que distancia en cm se para respecto la pared de delante xd
 
 int giros = 0;
 int gR = 0;
 int gL = 0;
-int tiempoREPO = 15000 // (milis)
+int tiempoREPO = 15000; // (milis)
 
 unsigned long lastTurnTime = 0;
 
@@ -114,29 +114,53 @@ int getDistance(NewPing &sonar) {
 }
 
 void giroIzquierda(){
-  if (giros = 0){
-    gL = 1;
-  }
+  // if (giros = 0){
+  //   gL = 1;
+  // }
+   
+  digitalWrite(IN1_PIN, LOW);
+  digitalWrite(IN2_PIN, HIGH);
+  analogWrite(ENABLE_PIN, 255);
+  delay(400); 
+
+  digitalWrite(IN1_PIN, LOW);
+  digitalWrite(IN2_PIN, HIGH);
+  analogWrite(ENABLE_PIN, 0);
+  delay(500); 
+
   myservo.write(min);
-  delay(500);
+  delay(450);
   forward(255);
   delay(miligiroIZQUIERDA);
-  giros = giros +1;
+  giros++;
   stop();
   lastTurnTime = millis(); // Update the last turn time
 }
 
 void giroDerecha(){
-  if (giros = 0){
-    gR = 1;
-  }
+  // if (giros = 0){
+  //   gR = 1;
+  // }
+  
+  digitalWrite(IN1_PIN, LOW);
+  digitalWrite(IN2_PIN, HIGH);
+  analogWrite(ENABLE_PIN, 255);
+  delay(400); 
+
+  digitalWrite(IN1_PIN, LOW);
+  digitalWrite(IN2_PIN, HIGH);
+  analogWrite(ENABLE_PIN, 0);
+  delay(500); 
+
+
   myservo.write(max);
-  delay(500);
+  delay(450);
   forward(255);
   delay(miligiroDERECHA);
-  giros = giros +1;
+  giros++;
   stop();
   lastTurnTime = millis(); // Update the last turn time
+
 }
 
 void atras(){
@@ -166,12 +190,14 @@ void reposition() {
   lastTurnTime = millis(); // Update the last turn time
   stop();
 
-  if (gR == 1){
-    servo.write(min);
-  }else if (gL == 1){
-    servo.write(max);
-  }
-  delay(500);
+  // if (gR == 1){
+  //   myservo.write(min);
+  // }else if (gL == 1){
+  //   myservo.write(max);
+  // }
+
+  myservo.write(90);
+  delay(800);
   lastTurnTime = millis(); // Update the last turn time
 
   digitalWrite(IN1_PIN, LOW);
@@ -192,40 +218,38 @@ void loop() {
   Serial.print("  ");
   Serial.println(rightDistance);
 
-  if (giros >= 12){
-    forceStop();
-    while(true){
+  if (giros < 12) {
+    if (frontDistance > distanciafreno) {
+      myservo.write(centro);
+      forward(200);
+    } else if (frontDistance < distanciafreno) {
+      forceStop();
+      if (getAverageFrontDistance(50) < distanciafreno) {
+        stop();
+        delay(1000);
+        if (leftDistance > rightDistance) {
+          giroIzquierda();
+        } else if (leftDistance < rightDistance) {
+          giroDerecha();
+        } else {
+          atras();
+        }
+      }
+    }
+
+    // Check if 20 seconds have passed since the last turn
+    if (millis() - lastTurnTime >= tiempoREPO) {
+      reposition();
+    }
+  } else {
+    // Continue moving forward until front distance is 160 cm
+    if (frontDistance < 160) {
       stop();
+    } else {
+      myservo.write(centro);
+      forward(200);
     }
   }
 
-  if (frontDistance > distanciafreno) {
-    myservo.write(centro);
-    forward(200);
-    }
-  
-  else if (frontDistance < distanciafreno){
-    forceStop();
-    if (getAverageFrontDistance(50) < distanciafreno){    
-      stop();
-      delay(1000);
-      if (leftDistance > rightDistance){
-      giroIzquierda();
-      }
-      else if (leftDistance < rightDistance){
-      giroDerecha();
-      }
-      else{
-      atras();
-      }
-    }
-    else{
-      //no hace nada si la promedio es mayor a la distancai de freno ewyufweyfvyef
-    }
-  }
-
-  // Check if 20 seconds have passed since the last turn
-  if (millis() - lastTurnTime >= tiempoREPO) {
-    reposition();
-  }
+  Serial.println(giros);
 }
