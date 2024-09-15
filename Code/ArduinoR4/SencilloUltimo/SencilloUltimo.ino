@@ -33,11 +33,14 @@ int MaxDistance = 300;
 // Servo Control
 Servo myservo;
 #define SERVO_PIN 11
+#define mid 109
+#define min 80
+#define max mid + (mid - min)
 
-int centro = 107 ;// para que vaya recto 
+int centro = mid ;// para que vaya recto 
 int miligiroDERECHA = 750; // cuantos milisegundo está con el motor prendido en amboos giros
 int miligiroIZQUIERDA = 550; // cuantos milisegundo está con el motor prendido en amboos giros
-
+int miligiroREPO = 500;
 int distanciafreno = 70; // a que distancia en cm se para respecto la pared de delante xd
 
 int giros = 0;
@@ -104,7 +107,7 @@ void giroIzquierda(){
   if (giros = 0){
     gL = 1;
   }
-  myservo.write(160);
+  myservo.write(min);
   delay(500);
   forward(255);
   delay(miligiroIZQUIERDA);
@@ -117,7 +120,7 @@ void giroDerecha(){
   if (giros = 0){
     gR = 1;
   }
-  myservo.write(80);
+  myservo.write(max);
   delay(500);
   forward(255);
   delay(miligiroDERECHA);
@@ -150,12 +153,22 @@ int getAverageFrontDistance(int numReadings) {
 }
 
 void reposition() {
-
+  lastTurnTime = millis(); // Update the last turn time
   stop();
+
+  if (gR == 1){
+    servo.write(min);
+  }else if (gL == 1){
+    servo.write(max);
+  }
+  delay(500);
+  lastTurnTime = millis(); // Update the last turn time
 
   digitalWrite(IN1_PIN, LOW);
   digitalWrite(IN2_PIN, HIGH);
   analogWrite(ENABLE_PIN, 255); 
+  delay(miligiroREPO);  // Pequeño retraso para aplicar el freno
+  stop();
 }
 
 void loop() {
@@ -205,6 +218,4 @@ void loop() {
   if (millis() - lastTurnTime >= 20000) {
     reposition();
   }
-
-  // Other logic for controlling the robot based on sensor data
 }
