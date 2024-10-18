@@ -431,7 +431,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "Main.kicad_pro",
+    "filename": "VDown12Vv2.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -576,7 +576,7 @@
   },
   "sheets": [
     [
-      "3b089dd5-6b8c-49e3-927c-c1987424d546",
+      "07594fa8-ae67-4e9e-b0f8-05f8dc0915f7",
       "Root"
     ]
   ],
