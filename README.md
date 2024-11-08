@@ -1,8 +1,8 @@
 # NotAPi_WRO_2024
 
------------------------------------------
-
 ##1. Gestión de Movilidad
+
+--------------------------------
 
 Selección y Implementación de Componentes:
 Hemos utilizado tres sensores ultrasónicos para la detección de obstáculos, ubicados uno en cada lado y otro en la parte delantera del vehículo. Para la tracción, hemos incorporado un motor de corriente continua de alto rendimiento. La tracción delantera se logra mediante una configuración de ruedas motrices. El vehículo base es un coche RC de dimensiones 15 x 8 cm, al que hemos realizado numerosas modificaciones para adaptarlo a nuestras necesidades.
