@@ -1,6 +1,7 @@
 # NotAPi_WRO_2024
 
 =================================
+
 ##1. Gestión de Movilidad
 ----------------------------------
 Selección y Implementación de Componentes:
