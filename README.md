@@ -5,7 +5,7 @@ La base de nuestro coche consiste de un coche a control remoto[link] del cual so
 
 ------------------------------------------
 ## 2.Gestion de los sensores y de la alimentaci'on
-Disponemos de una bateria XXXXX que est'a conectada con un regulador de alimentacion. En cuanto a sensores usamos tres tofXXX, tres lidar para 
+Disponemos de una bateria XXXXX que est'a conectada con un regulador de alimentacion. En cuanto a sensores usamos tres tofXXX, tres lidar para detectar las paredes y una raspberry picam para detecci'on de colores
 
 ## 3.Obstaculos
 No tenemos una idea muy clara de como manejar los obstaculos pero usaremos la camara para detectar los colores y con la ayuda de los otros sensores conduciremos el coche a el lado deseado
