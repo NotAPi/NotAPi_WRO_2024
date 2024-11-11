@@ -9,5 +9,3 @@ The battery is a lipo battery 4 Cells 850mAh 14.8V, connected to 2 different vol
 The sensors are 3 lidars and 3 tofs connected to a raspberry pi 4 thru the pcb and screwed to the supporting structures mentioned previous section as of writing the camera is not yet mounted. Previously we used camera extracted from a laptop wich we might change for a raspberry picam 220º with fisheye lens.
 ## 3.Obstacle Management
 The car is designed to start measuring it's distance to the walls in front and the sides, by advancing until the front distance is about 20cm then stops checks to the sides decides the direction of rotation by checking wich side has a close wall and then turns to the correct side, repeats this process at every corner and after counting 12 times it should stop when the distance in front is within a margin of error of the distance at the beginning. We have yet to code the second part, the obstacle course
-
-## 4.
