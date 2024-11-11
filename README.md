@@ -1,7 +1,7 @@
 # NotAPi_WRO_2024
 
 ## 1.Gestión de Movilidad
-La base de nuestro coche consiste de un coche a control remoto[link] del cual solo conservamos el la base la direccion delantera y las rudeas. Como motor usamos un ( ) junto a un par de engranajes impresos con CNC hacen que se mueva 😎 y un controlador de motores L298N. Para la direcci'on usamos un servo.... El resto del chasis esta imprimido 3D, soportes para los conectores, .
+La base de nuestro coche consiste de un coche a control remoto[nombre](link) del cual solo conservamos el la base la direccion delantera y las rudeas. Como motor usamos un ( ) junto a un par de engranajes impresos con CNC hacen que se mueva 😎 y un controlador de motores L298N. Para la direcci'on usamos un servo.... El resto del chasis esta imprimido 3D, soportes para los conectores, .
 
 ------------------------------------------
 ## 2.Gestion de los sensores y de la alimentaci'on
