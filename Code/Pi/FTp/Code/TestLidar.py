@@ -101,20 +101,37 @@ def stop():
     pi.write(IN2_PIN, 0)
     pi.set_PWM_dutycycle(ENA_PIN, 0)
 
-def servo(angle):
+def servo(angle=105):
     pulse_width = 500 + (angle / 180.0) * 2000
     pi.set_servo_pulsewidth(SERVO_PIN, pulse_width)
 
-def turnRight():
-    print("Right")
-    
+def turnRight(angle=90):
+    stop()
+    time.sleep(0.25)
+    if angle == 90:
+        servo(155)
+        forward(255)
+        time.sleep(2)
+
+def turnLeft(angle=90):
+    stop()
+    time.sleep(0.25)
+    if angle == 90:
+        servo(55)
+        forward(255)
+        time.sleep(2)
+
+def forwardm(distance=1):
+    forward(255)
+    time.sleep(6.6*distance)
 
 try:
     servo(105)
     forward()
     time.sleep(1)
     while Laps < 3:
-               
+        
+        LastClose = 0
         # Get Front distance    
         Fdistance = F_read_lidar()
         # print("F:")
@@ -159,11 +176,23 @@ try:
         
         
         # print(Fdistance)
+        print("CheckFront")
         time.sleep(0.1)
         if Fdistance < 15:
-            stop()
+            if LastClose == 0:
+                LastClose == 1
+                print("close")
+            elif LastClose == 1:
+                print("stop") 
+                stop()
+            else:
+                print("??? Front")
         else:
-                
+            LastClose = 0
+            print("good")
+            forward()
+
+            # forward()
             # Ldistance = L_read_lidar()
             # Rdistance = R_read_lidar()
             
@@ -172,27 +201,41 @@ try:
             
             # while Rdistance is None:
             #     Rdistance = R_read_lidar()
-                
+            
             print(time.strftime("%Y-%m-%d %H:%M:%S") + " F: " + str(Fdistance) + " L: " + str(Ldistance) + " R: " + str(Rdistance))
-            time.sleep(0.1)
+
+            if Ldistance > 150:
+                print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+                servo(55) 
+                forward()
+                time.sleep(2)
+                servo()
+                time.sleep(2)
+                stop()
+                time.sleep(2)
             
             
-            
-            while Ldistance is None or Ldistance > 400:
-            #     Ldistance = L_read_lidar()
-            # if Rdistance
-            # if Ldistance is not None and Rdistance is not None:
-            #     print(f"L: {Ldistance} R: {Rdistance}")
-                
-            # while Ldistance is None or Ldistance > 400:
-                # Ldistance = L_read_lidar()
-                if Ldistance > Rdistance * 0.9:
-                    servo(55)  # Turn left
-                elif Rdistance > Ldistance * 0.9:
-                    servo(155)  # Turn right
-                else:
-                    servo(105)  # Go straight
-        
+            if Rdistance > 150: 
+                print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
+                servo(155)
+                forward()
+                time.sleep(2)
+                servo()
+                time.sleep(2)
+                stop()
+                time.sleep(2)
+           
+            if Ldistance > Rdistance * 0.9:
+                servo(55)  # Turn left
+                print("55")
+            elif Rdistance > Ldistance * 0.9:
+                servo(155)  # Turn right
+                print("155")
+            else:
+                servo(105)  # Go straight
+                print("105")
+                    
+        time.sleep(0.1)
         
         
         # forward()
