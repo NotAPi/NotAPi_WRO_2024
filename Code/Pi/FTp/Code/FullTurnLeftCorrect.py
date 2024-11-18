@@ -180,7 +180,7 @@ def distances():
 
 def turnLeftFull():
     servo(105)
-    # forwardm(0.1)
+    forwardm(0.2)
     turnLeft(90)
     
     servo()
@@ -208,7 +208,7 @@ def turnLeftFull():
     
 def turnRightFull():
     servo(105)
-    # forwardm(0.1)
+    forwardm(0.2)
     turnRight(90)
     
     servo()
@@ -244,29 +244,28 @@ try:
         while Ldistance < 100 or Rdistance < 100:
             forward()
             Ldistance, Rdistance, Fdistance = distances()
-            #aaa#aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
+            print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
             time.sleep(0.2)
-            if Ldistance + Rdistance > 120:
+            if Ldistance + Rdistance > 110:
                 break
         #aaaprint("Turn time")
         
-        if Ldistance > 100:
+        if Ldistance > Rdistance:
             turnLeftFull()
             giros = giros + 1
             #aaaprint("Left")
         
-        if Rdistance > 100:
+        if Rdistance > Ldistance:
             turnRightFull()
             giros = giros + 1
             #aaaprint("Right")
-        
         forward()
         Ldistance, Rdistance, Fdistance = distances()
 
         while int(Fdistance) > 165:
             forward()
             Ldistance, Rdistance, Fdistance = distances()
-            #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
+            print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
             time.sleep(0.2)
             #aaaprint ("F " + str(Fdistance))
             if int(Fdistance) < 165:
