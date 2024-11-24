@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from picamera2 import Picamera2
+import time
 
 # Initialize the Raspberry Pi camera
 picam2 = Picamera2()
@@ -8,7 +9,6 @@ picam2.configure(picam2.create_preview_configuration(main={"size": (640, 480)}))
 picam2.start()
 
 # Allow the camera to warm up
-import time
 time.sleep(0.1)
 
 while True:
