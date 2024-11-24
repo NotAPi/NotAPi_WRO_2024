@@ -14,15 +14,18 @@ time.sleep(0.1)
 while True:
     image = picam2.capture_array()
 
+    # Swap the red and blue channels
+    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
     cv2.waitKey(1000) 
 
-    altura, anchura = image.shape[:2]  # Obtener las dimensiones de la imagen
+    altura, anchura = image_rgb.shape[:2]  # Obtener las dimensiones de la imagen
     p1_izquierda = (anchura // 3, 0) 
     p2_izquierda = (0, altura)
     p1_derecha = (2 * anchura // 3, 0) 
     p2_derecha = (anchura, altura) 
 
-    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    hsv_image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2HSV)
     lower_red1 = np.array([0, 100, 100])
     upper_red1 = np.array([10, 255, 255])
     lower_red2 = np.array([160, 100, 100])
@@ -102,7 +105,7 @@ while True:
 
     cv2.imshow('Red Mask', red_mask)
     cv2.imshow('Green Mask', green_mask)
-    cv2.imshow('original', image)
+    cv2.imshow('original', image_rgb)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
