@@ -11,10 +11,21 @@ picam2.start()
 # Allow the camera to warm up
 time.sleep(0.1)
 
-# Capture an image
-image = picam2.capture_array()
+# Capture and display video frames
+while True:
+    # Capture a frame
+    image = picam2.capture_array()
 
-# Display the image using OpenCV
-cv2.imshow("Captured Image", image)
-cv2.waitKey(0)  # Wait for a key press to close the window
+    # Swap the red and blue channels
+    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    # Display the frame using OpenCV
+    cv2.imshow("Video Stream", image_rgb)
+
+    # Break the loop if 'q' is pressed
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# Release resources
 cv2.destroyAllWindows()
+picam2.stop()
