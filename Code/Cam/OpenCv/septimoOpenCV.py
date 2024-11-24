@@ -105,7 +105,7 @@ while True:
 
     cv2.imshow('Red Mask', red_mask)
     cv2.imshow('Green Mask', green_mask)
-    cv2.imshow('original', image_rgb)
+    cv2.imshow('original', image)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
