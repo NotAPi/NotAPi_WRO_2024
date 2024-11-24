@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import picamera
+# import picamera
 
 video_path = "/home/jara/Robotica/OpenCv/Imagenes/sinFLASH.mp4"
 video_path2 = "/home/jara/Robotica/OpenCv/Imagenes/wro2020-fe-POV2-280mm.mp4"
