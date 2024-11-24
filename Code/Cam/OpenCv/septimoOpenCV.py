@@ -51,7 +51,7 @@ while True:
 
         for contour in contours:
             M = cv2.moments(contour)
-            if M["m00"] > 50:  # Ajusta este umbral para ignorar ruido
+            if M["m00"] > 200:  # Ajusta este umbral para ignorar ruido
                 cX = int(M["m10"] / M["m00"])
                 cY = int(M["m01"] / M["m00"])
                 cv2.drawContours(image, [contour], -1, color, 2)
@@ -68,7 +68,7 @@ while True:
         
         for contour in contours2:
             M = cv2.moments(contour)
-            if M["m00"] > 50:  # Ajusta este umbral para ignorar ruido
+            if M["m00"] > 200:  # Ajusta este umbral para ignorar ruido
                 cX = int(M["m10"] / M["m00"])
                 cY = int(M["m01"] / M["m00"])
                 cv2.drawContours(image, [contour], -1, color2, 2)
