@@ -1,23 +1,27 @@
 import cv2
 import numpy as np
-# import picamera
+import picamera
+from picamera.array import PiRGBArray
 
-video_path = "/home/jara/Robotica/OpenCv/Imagenes/sinFLASH.mp4"
-video_path2 = "/home/jara/Robotica/OpenCv/Imagenes/wro2020-fe-POV2-280mm.mp4"
-cap = cv2.VideoCapture(0)
+# Initialize the Raspberry Pi camera
+camera = picamera.PiCamera()
+camera.resolution = (640, 480)
+camera.framerate = 32
+rawCapture = PiRGBArray(camera, size=(640, 480))
 
-while True:
+# Allow the camera to warm up
+import time
+time.sleep(0.1)
 
-    et, frame = cap.read() # Leer un cuadro de la cámara
-
-    image = cv2.resize(frame, (640, 480))
+for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+    image = frame.array
 
     cv2.waitKey(1000) 
 
-    altura, anchura = image.shape[:2]# Obtener las dimensiones de la imagen
-    p1_izquierda = (anchura//3, 0) 
+    altura, anchura = image.shape[:2]  # Obtener las dimensiones de la imagen
+    p1_izquierda = (anchura // 3, 0) 
     p2_izquierda = (0, altura)
-    p1_derecha = (2*anchura//3, 0) 
+    p1_derecha = (2 * anchura // 3, 0) 
     p2_derecha = (anchura, altura) 
 
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -106,5 +110,7 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-cap.release()
+    # Clear the stream in preparation for the next frame
+    rawCapture.truncate(0)
+
 cv2.destroyAllWindows()
