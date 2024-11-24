@@ -33,7 +33,7 @@ while True:
     lower_green = np.array([35, 100, 50])
     upper_green = np.array([85, 255, 255])
 
-    #mask_red1 = cv2.inRange(hsv_image, lower_red1, upper_red1)
+    #mask_red1 = cv2.inRange(hsv_image, lower_red1, upper_red1)xd
     #mask_red2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
     r#ed_mask = cv2.bitwise_or(mask_red1, mask_red2) 
     red_mask = cv2.inRange(hsv_image, lower_red1, upper_red1)
