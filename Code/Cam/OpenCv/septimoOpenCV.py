@@ -26,16 +26,17 @@ while True:
     p2_derecha = (anchura, altura) 
 
     hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
-    lower_red1 = np.array([0, 100, 100])
-    upper_red1 = np.array([10, 255, 255])
-    lower_red2 = np.array([160, 100, 100])
-    upper_red2 = np.array([179, 255, 255])
+    lower_red1 = np.array([120, 100, 100])
+    upper_red1 = np.array([150, 255, 255])
+    #lower_red2 = np.array([160, 100, 100])
+    #upper_red2 = np.array([179, 255, 255])
     lower_green = np.array([35, 100, 50])
     upper_green = np.array([85, 255, 255])
 
-    mask_red1 = cv2.inRange(hsv_image, lower_red1, upper_red1)
-    mask_red2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
-    red_mask = cv2.bitwise_or(mask_red1, mask_red2) 
+    #mask_red1 = cv2.inRange(hsv_image, lower_red1, upper_red1)
+    #mask_red2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
+    r#ed_mask = cv2.bitwise_or(mask_red1, mask_red2) 
+    red_mask = cv2.inRange(hsv_image, lower_red1, upper_red1)
     green_mask = cv2.inRange(hsv_image, lower_green, upper_green)
 
     def draw_centroids_and_contours(mask, image, color, mask2, color2):
