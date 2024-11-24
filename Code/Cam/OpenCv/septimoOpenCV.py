@@ -17,7 +17,7 @@ while True:
     # Swap the red and blue channels
     image = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
 
-    cv2.waitKey(1000) 
+    cv2.waitKey(1) 
 
     altura, anchura = image.shape[:2]  # Obtener las dimensiones de la imagen
     p1_izquierda = (anchura // 3, 0) 
