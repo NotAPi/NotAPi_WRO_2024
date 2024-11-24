@@ -1,20 +1,18 @@
 import cv2
 import numpy as np
-import picamera
-from picamera.array import PiRGBArray
+from picamera2 import Picamera2
 
 # Initialize the Raspberry Pi camera
-camera = picamera.PiCamera()
-camera.resolution = (640, 480)
-camera.framerate = 32
-rawCapture = PiRGBArray(camera, size=(640, 480))
+picam2 = Picamera2()
+picam2.configure(picam2.create_preview_configuration(main={"size": (640, 480)}))
+picam2.start()
 
 # Allow the camera to warm up
 import time
 time.sleep(0.1)
 
-for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
-    image = frame.array
+while True:
+    image = picam2.capture_array()
 
     cv2.waitKey(1000) 
 
@@ -38,15 +36,14 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     green_mask = cv2.inRange(hsv_image, lower_green, upper_green)
 
     def draw_centroids_and_contours(mask, image, color, mask2, color2):
-
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours2, _ = cv2.findContours(mask2, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         bloque_cercano = -1
         bloque_centro_x = -1  # Coordenada X del bloque más bajo
         bloque_color = None  # Color del bloque más bajo (para dibujar)
-        verde = (0,255,0)
-        rojo = (0,0,255)
+        verde = (0, 255, 0)
+        rojo = (0, 0, 255)
 
         for contour in contours:
             M = cv2.moments(contour)
@@ -109,8 +106,5 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-
-    # Clear the stream in preparation for the next frame
-    rawCapture.truncate(0)
 
 cv2.destroyAllWindows()
