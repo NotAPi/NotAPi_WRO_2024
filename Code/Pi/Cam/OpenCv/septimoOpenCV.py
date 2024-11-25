@@ -26,12 +26,12 @@ while True:
     p2_derecha = (anchura, altura) 
 
     hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
-    lower_red1 = np.array([120, 100, 100])
-    upper_red1 = np.array([150, 255, 255])
+    lower_red1 = np.array([125, 100, 100])
+    upper_red1 = np.array([140, 255, 255])
     #lower_red2 = np.array([160, 100, 100])
     #upper_red2 = np.array([179, 255, 255])
-    lower_green = np.array([35, 100, 50])
-    upper_green = np.array([85, 255, 255])
+    lower_green = np.array([40, 100, 50])
+    upper_green = np.array([70, 255, 255])
 
     #mask_red1 = cv2.inRange(hsv_image, lower_red1, upper_red1)xd
     #mask_red2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
