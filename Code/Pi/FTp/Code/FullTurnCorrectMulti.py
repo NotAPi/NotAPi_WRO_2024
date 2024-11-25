@@ -146,6 +146,8 @@ def F_Loop():
             FdistanceTemp = F_read_lidar()
             if FdistanceTemp is not None:
                 Fdistance = FdistanceTemp
+            print(f"Fdistance updated: {Fdistance}")
+            
             time.sleep(0.1)
 
 def L_Loop():
@@ -155,6 +157,8 @@ def L_Loop():
             LdistanceTemp = L_read_lidar()
             if LdistanceTemp is not None:
                 Ldistance = LdistanceTemp
+            print(f"Ldistance updated: {Ldistance}")
+            
             time.sleep(0.1)
 
 def R_Loop():
@@ -164,6 +168,8 @@ def R_Loop():
             RdistanceTemp = R_read_lidar()
             if RdistanceTemp is not None:
                 Rdistance = RdistanceTemp
+            print(f"Rdistance updated: {Rdistance}")
+
             time.sleep(0.1)
 
 def distances():
