@@ -3,11 +3,9 @@ import pigpio
 import os
 from pynput import keyboard
 import cv2
-import numpy as np
 from picamera2 import Picamera2
 import time
 import pigpio
-import os
 
 try:
 
