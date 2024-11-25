@@ -90,39 +90,39 @@ def L_read_lidar():
         
 def F_Read():
     global Fdistance
-    FdistanceTemp1 = F_read_lidar()
-    if FdistanceTemp1 is not None and FdistanceTemp1 < 500:
+    while True:
+        FdistanceTemp1 = F_read_lidar()
+        if FdistanceTemp1 is not None and FdistanceTemp1 < 500:
             Fdistance = FdistanceTemp1
-            return Fdistance
             print(f"Fdistance updated: {Fdistance}")
-    else:
-        print(f"F Invalid readings: {FdistanceTemp1}")
-    
-    time.sleep(0.1)
-
+            return Fdistance
+        else:
+            print(f"F Invalid readings: {FdistanceTemp1}")
+        time.sleep(0.1)
+        
 def L_Read():
     global Ldistance
-    LdistanceTemp1 = L_read_lidar()
-    if LdistanceTemp1 is not None and LdistanceTemp1 < 500:
+    while True:
+        LdistanceTemp1 = L_read_lidar()
+        if LdistanceTemp1 is not None and LdistanceTemp1 < 500:
             Ldistance = LdistanceTemp1
-            return Ldistance
             print(f"Ldistance updated: {Ldistance}")
-    else:
-        print(f"L Invalid readings: {LdistanceTemp1}")
-    
-    time.sleep(0.1)
+            return Ldistance
+        else:
+            print(f"L Invalid readings: {LdistanceTemp1}")
+        time.sleep(0.1)
 
 def R_Read():
     global Rdistance
-    RdistanceTemp1 = R_read_lidar()
-    if RdistanceTemp1 is not None and RdistanceTemp1 < 500:
+    while True:
+        RdistanceTemp1 = R_read_lidar()
+        if RdistanceTemp1 is not None and RdistanceTemp1 < 500:
             Rdistance = RdistanceTemp1
-            return Rdistance
             print(f"Rdistance updated: {Rdistance}")
-    else:
-        print(f"R Invalid readings: {RdistanceTemp1}")
-    
-    time.sleep(0.1)
+            return Rdistance
+        else:
+            print(f"R Invalid readings: {RdistanceTemp1}")
+        time.sleep(0.1)
 
 def forward(speed=255):
     pi.write(IN1_PIN, 0)
