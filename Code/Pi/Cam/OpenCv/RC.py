@@ -15,7 +15,7 @@ def on_press_key(key):
         elif key.char == 'd':
             servo(155)
         elif key.char == 'x':
-            backward  # Example for turning servo left
+            backward()  # Example for turning servo left
         #elif key.char == 'e':
               # Example for turning servo right
     except AttributeError:
@@ -90,10 +90,6 @@ def L_read_lidar():
             return distance
 
 
-def backward(speed=255):
-    pi.write(IN1_PIN, 1)
-    pi.write(IN2_PIN, 0)
-    pi.set_PWM_dutycycle(ENA_PIN, speed)
 
 def forward(speed=255):
     pi.write(IN1_PIN, 0)
