@@ -1,7 +1,6 @@
 import time
 import pigpio
 import os
-import sys
 
 try:
     os.system("sudo pigpiod")  # Launching GPIO library
@@ -15,21 +14,21 @@ except:
 # Initialize pigpio
 pi = pigpio.pi()
 
-L_RX_PIN = 22
+L_RX_PIN = 22 #left recieve pin son serial
 R_RX_PIN = 24
 F_RX_PIN = 25
 
-IN1_PIN = 10
+IN1_PIN = 10 #motor pins
 IN2_PIN = 11
 ENA_PIN = 12
 
-SERVO_PIN = 17
+SERVO_PIN = 17 #servo pin
 
 
 Laps = 0
 # Try to close the serial connection if it is already open
 try:
-    pi.bb_serial_read_close(R_RX_PIN)
+    pi.bb_serial_read_close(R_RX_PIN) 
     pi.bb_serial_read_close(L_RX_PIN)
     pi.bb_serial_read_close(F_RX_PIN)
 except:
@@ -38,15 +37,15 @@ except:
 
 
 # Set up the software serial connection
-pi.set_mode(R_RX_PIN, pigpio.INPUT)
-pi.bb_serial_read_open(R_RX_PIN, 115200)
-pi.set_mode(L_RX_PIN, pigpio.INPUT)
+pi.set_mode(R_RX_PIN, pigpio.INPUT) 
+pi.bb_serial_read_open(R_RX_PIN, 115200) 
+pi.set_mode(L_RX_PIN, pigpio.INPUT) 
 pi.bb_serial_read_open(L_RX_PIN, 115200)
-pi.set_mode(F_RX_PIN, pigpio.INPUT)
+pi.set_mode(F_RX_PIN, pigpio.INPUT) 
 pi.bb_serial_read_open(F_RX_PIN, 115200)
 #aaaprint("init done")
 
-def parse_lidar_data(data):
+def parse_lidar_data(data): 
     if len(data) >= 9 and data[0] == 0x59 and data[1] == 0x59:
         distance = data[2] + data[3] * 256
         strength = data[4] + data[5] * 256
@@ -167,7 +166,7 @@ def distances():
     if Rdistance is None:
         try: 
             Rdistance = RdistanceOld
-        except:
+        except: #si danone
             while True:
                 Rdistance = R_read_lidar()
                 if Rdistance is not None:
@@ -179,7 +178,7 @@ def distances():
     return Ldistance, Rdistance, Fdistance
 
 def turnLeftFull():
-    servo(105)
+    servo()
     forwardm(0.2)
     turnLeft(90)
     
