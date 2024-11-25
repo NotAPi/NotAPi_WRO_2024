@@ -30,7 +30,7 @@ while True:
     upper_red1 = np.array([160, 255, 255])
     #lower_red2 = np.array([160, 100, 100])
     #upper_red2 = np.array([179, 255, 255])
-    lower_green = np.array([40, 100, 50])
+    lower_green = np.array([20, 100, 50])
     upper_green = np.array([70, 255, 255])
 
     #mask_red1 = cv2.inRange(hsv_image, lower_red1, upper_red1)xd
