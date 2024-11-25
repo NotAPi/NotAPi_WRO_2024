@@ -192,7 +192,7 @@ def R_Loop():
         
         if RdistanceTemp1 is not None and RdistanceTemp2 is not None and RdistanceTemp1 < 500 and RdistanceTemp2 < 500:
             # Check if the two readings are within 25% of each other
-            lower_bound = RdistanceTemp1 + 40
+            lower_bound = RdistanceTemp1 - 40
             upper_bound = RdistanceTemp1 + 40
             if lower_bound <= RdistanceTemp2 <= upper_bound:
                 with lock:
