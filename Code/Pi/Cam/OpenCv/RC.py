@@ -15,6 +15,12 @@ try:
     picam2.configure(picam2.create_preview_configuration(main={"size": (640, 480)}))
     picam2.start()
 
+    image_bgr = picam2.capture_array()
+
+    image = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
+
+    cv2.imshow('original', image)
+
     # Define the key press actions
     def on_press_key(key):
         try:
