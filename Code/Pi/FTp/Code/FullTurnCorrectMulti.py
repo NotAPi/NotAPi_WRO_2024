@@ -157,7 +157,7 @@ def F_Loop():
                 else:
                     print(f"Fdistance not updated: {FdistanceTemp1} and {FdistanceTemp2} are not within 25% of each other")
             else:
-                print(f"Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
+                print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
             
             time.sleep(0.1)
 
@@ -165,11 +165,23 @@ def L_Loop():
     global Ldistance
     while True:
         with lock:
-            LdistanceTemp1 = L_read_lidar()
-            time.sleep(0.05)  # Short delay before the second reading
-            LdistanceTemp2 = L_read_lidar()
-            
-            if LdistanceTemp1 is not None and LdistanceTemp2 is not None and LdistanceTemp1 < 500 and LdistanceTemp2 < 500:
+            # Retry mechanism for the first reading
+            LdistanceTemp1 = None
+            for _ in range(3):  # Retry up to 3 times
+                LdistanceTemp1 = L_read_lidar()
+                if LdistanceTemp1 is not None and LdistanceTemp1 < 500:
+                    break
+                time.sleep(0.05)  # Short delay before retrying
+
+            # Retry mechanism for the second reading
+            LdistanceTemp2 = None
+            for _ in range(3):  # Retry up to 3 times
+                LdistanceTemp2 = L_read_lidar()
+                if LdistanceTemp2 is not None and LdistanceTemp2 < 500:
+                    break
+                time.sleep(0.05)  # Short delay before retrying
+
+            if LdistanceTemp1 is not None and LdistanceTemp2 is not None:
                 # Check if the two readings are within 25% of each other
                 lower_bound = LdistanceTemp1 * 0.75
                 upper_bound = LdistanceTemp1 * 1.25
@@ -179,8 +191,8 @@ def L_Loop():
                 else:
                     print(f"Ldistance not updated: {LdistanceTemp1} and {LdistanceTemp2} are not within 25% of each other")
             else:
-                print(f"Invalid readings: {LdistanceTemp1}, {LdistanceTemp2}")
-            
+                print(f"L Invalid readings: {LdistanceTemp1}, {LdistanceTemp2}")
+
             time.sleep(0.1)
 
 def R_Loop():
@@ -201,7 +213,7 @@ def R_Loop():
                 else:
                     print(f"Rdistance not updated: {RdistanceTemp1} and {RdistanceTemp2} are not within 25% of each other")
             else:
-                print(f"Invalid readings: {RdistanceTemp1}, {RdistanceTemp2}")
+                print(f"R Invalid readings: {RdistanceTemp1}, {RdistanceTemp2}")
             
             time.sleep(0.1)
 
@@ -384,10 +396,7 @@ def main():
             for a in range(5):
                 print(giros)
             
-        stop()
-
-            
-            
+        stop()            
 
     except KeyboardInterrupt:
         stop()
