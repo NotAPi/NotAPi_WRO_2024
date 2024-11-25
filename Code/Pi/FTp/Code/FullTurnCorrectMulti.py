@@ -246,17 +246,16 @@ if __name__ == "__main__":
     distances_thread = threading.Thread(target=distance_loop)
     distances_thread.daemon = True
     distances_thread.start()
-
+    global Ldistance, Rdistance, Fdistance
     try:
         servo()
         time.sleep(0.05)
         forward()
         giros = 0
         while True:
-            Ldistance, Rdistance, Fdistance = distances()
             while Ldistance < 100 or Rdistance < 100:
                 forward()
-                Ldistance, Rdistance, Fdistance = distances()
+                # Ldistance, Rdistance, Fdistance = distances()
                 print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
                 time.sleep(0.2)
                 if Ldistance + Rdistance > 110:
@@ -273,11 +272,11 @@ if __name__ == "__main__":
                 giros = giros + 1
                 #aaaprint("Right")
             forward()
-            Ldistance, Rdistance, Fdistance = distances()
+            # Ldistance, Rdistance, Fdistance = distances()
 
             while int(Fdistance) > 165:
                 forward()
-                Ldistance, Rdistance, Fdistance = distances()
+                # Ldistance, Rdistance, Fdistance = distances()
                 print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
                 time.sleep(0.2)
                 #aaaprint ("F " + str(Fdistance))
@@ -289,7 +288,7 @@ if __name__ == "__main__":
             #aaaprint("150")
             
             #aaaprint("Correct time")
-            Ldistance, Rdistance, Fdistance = distances()
+            # Ldistance, Rdistance, Fdistance = distances()
             #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
             stop()
             
