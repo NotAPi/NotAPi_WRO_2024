@@ -86,15 +86,13 @@ def L_read_lidar():
             # #aaaprint(f"DistanceL: {distance} cm, Strength: {strength}")
             return distance
         
-        
-        
 def F_Read():
     global Fdistance
     while True:
         FdistanceTemp1 = F_read_lidar()
         if FdistanceTemp1 is not None and FdistanceTemp1 < 500:
             Fdistance = FdistanceTemp1
-            print(f"Fdistance updated: {Fdistance}")
+            # print(f"Fdistance updated: {Fdistance}")
             return Fdistance
         else:
             print(f"F Invalid readings: {FdistanceTemp1}")
@@ -106,7 +104,7 @@ def L_Read():
         LdistanceTemp1 = L_read_lidar()
         if LdistanceTemp1 is not None and LdistanceTemp1 < 500:
             Ldistance = LdistanceTemp1
-            print(f"Ldistance updated: {Ldistance}")
+            # print(f"Ldistance updated: {Ldistance}")
             return Ldistance
         else:
             print(f"L Invalid readings: {LdistanceTemp1}")
@@ -118,7 +116,7 @@ def R_Read():
         RdistanceTemp1 = R_read_lidar()
         if RdistanceTemp1 is not None and RdistanceTemp1 < 500:
             Rdistance = RdistanceTemp1
-            print(f"Rdistance updated: {Rdistance}")
+            # print(f"Rdistance updated: {Rdistance}")
             return Rdistance
         else:
             print(f"R Invalid readings: {RdistanceTemp1}")
