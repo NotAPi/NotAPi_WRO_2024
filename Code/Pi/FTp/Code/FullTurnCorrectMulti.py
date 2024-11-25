@@ -144,7 +144,7 @@ def F_Loop():
     while True:
         with lock:
             FdistanceTemp = F_read_lidar()
-            if FdistanceTemp is not None:
+            if FdistanceTemp is not None and FdistanceTemp < 500:
                 Fdistance = FdistanceTemp
             print(f"Fdistance updated: {Fdistance}")
             
@@ -155,7 +155,7 @@ def L_Loop():
     while True:
         with lock:
             LdistanceTemp = L_read_lidar()
-            if LdistanceTemp is not None:
+            if LdistanceTemp is not None and LdistanceTemp < 500:
                 Ldistance = LdistanceTemp
             print(f"Ldistance updated: {Ldistance}")
             
@@ -166,7 +166,7 @@ def R_Loop():
     while True:
         with lock:
             RdistanceTemp = R_read_lidar()
-            if RdistanceTemp is not None:
+            if RdistanceTemp is not None and RdistanceTemp < 500:
                 Rdistance = RdistanceTemp
             print(f"Rdistance updated: {Rdistance}")
 
