@@ -9,7 +9,6 @@ try:
     os.system("sudo pigpiod")  # Launching GPIO library
     time.sleep(1)  # As it takes some time to launch
 except:
-    #aaaprint("GPIO library already launched")
     pass
 
 # Initialize the Raspberry Pi camera
@@ -17,11 +16,11 @@ picam2 = Picamera2()
 picam2.configure(picam2.create_preview_configuration(main={"size": (640, 480)}))
 picam2.start()
 
-IN1_PIN = 10 #motor pins
+IN1_PIN = 10  # Motor pins
 IN2_PIN = 11
 ENA_PIN = 12
 
-SERVO_PIN = 17 #servo pin
+SERVO_PIN = 17  # Servo pin
 
 # Initialize pigpio
 pi = pigpio.pi()
@@ -34,13 +33,21 @@ def forward(speed=255):
     pi.write(IN2_PIN, 1)
     pi.set_PWM_dutycycle(ENA_PIN, speed)
 
+def backward(speed=255):
+    pi.write(IN1_PIN, 1)
+    pi.write(IN2_PIN, 0)
+    pi.set_PWM_dutycycle(ENA_PIN, speed)
+
+def stop():
+    pi.write(IN1_PIN, 0)
+    pi.write(IN2_PIN, 0)
+    pi.set_PWM_dutycycle(ENA_PIN, 0)
+
 while True:
     image_bgr = picam2.capture_array()
 
     # Swap the red and blue channels
     image = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
-
-    cv2.waitKey(1) 
 
     altura, anchura = image.shape[:2]  # Obtener las dimensiones de la imagen
     p1_izquierda = (anchura // 3, 0) 
@@ -119,8 +126,6 @@ while True:
 
 
     draw_centroids_and_contours(red_mask, image, (0, 0, 255), green_mask, (0, 255, 0))
-    forward()
-
     
     cv2.line(image, p1_izquierda, p2_izquierda, (0, 255, 255), 2)
     cv2.line(image, p1_derecha, p2_derecha, (0, 255, 255), 2)
@@ -129,12 +134,18 @@ while True:
     cv2.imshow('Green Mask', green_mask)
     cv2.imshow('original', image)
 
-    
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        pi.write(IN1_PIN, 0)
-        pi.write(IN2_PIN, 0)
-        pi.set_PWM_dutycycle(ENA_PIN, 0)
+    # Check for key presses
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('w'):
+        forward()
+    elif key == ord('s'):
+        backward()
+    elif key == ord('x'):
+        stop()
+    elif key == ord('q'):
         break
 
+# Cleanup
+stop()
 cv2.destroyAllWindows()
+pi.stop()
