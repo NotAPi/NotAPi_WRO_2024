@@ -53,7 +53,7 @@ def parse_lidar_data(data):
         return distance, strength
     return None, None
 
-def F_read_lidar():
+def F_Read():
     while True:
         (count, data) = pi.bb_serial_read(F_RX_PIN)
         if count > 0:
@@ -64,7 +64,7 @@ def F_read_lidar():
             # #aaaprint(f"DistanceR: {distance} cm, Strength: {strength}")
             return distance
 
-def R_read_lidar():
+def R_Read():
     while True:
         (count, data) = pi.bb_serial_read(R_RX_PIN)
         if count > 0:
@@ -75,7 +75,7 @@ def R_read_lidar():
             # #aaaprint(f"DistanceR: {distance} cm, Strength: {strength}")
             return distance
 
-def L_read_lidar():
+def L_Read():
     while True:
         (count, data) = pi.bb_serial_read(L_RX_PIN)
         if count > 0:
@@ -90,7 +90,7 @@ def L_read_lidar():
         
 def F_Read():
     global Fdistance
-    FdistanceTemp1 = F_read_lidar()
+    FdistanceTemp1 = F_Read()
     if FdistanceTemp1 is not None and FdistanceTemp1 < 500:
             Fdistance = FdistanceTemp1
             print(f"Fdistance updated: {Fdistance}")
@@ -101,7 +101,7 @@ def F_Read():
 
 def L_Read():
     global Ldistance
-    LdistanceTemp1 = L_read_lidar()
+    LdistanceTemp1 = L_Read()
     if LdistanceTemp1 is not None and LdistanceTemp1 < 500:
             Ldistance = LdistanceTemp1
             print(f"Ldistance updated: {Ldistance}")
@@ -112,7 +112,7 @@ def L_Read():
 
 def R_Read():
     global Rdistance
-    RdistanceTemp1 = R_read_lidar()
+    RdistanceTemp1 = R_Read()
     if RdistanceTemp1 is not None and RdistanceTemp1 < 500:
             Rdistance = RdistanceTemp1
             print(f"Rdistance updated: {Fdistance}")
@@ -164,14 +164,14 @@ def distances():
     
     # Get Front distance    
     #aaaprint("F")
-    Fdistance = F_read_lidar()
+    Fdistance = F_Read()
     # #aaaprint("F:")
     if Fdistance is None:
         try: 
             Fdistance = FdistanceOld
         except:
             while True:
-                Fdistance = F_read_lidar()
+                Fdistance = F_Read()
                 if Fdistance is not None:
                     break                
     else:
@@ -181,14 +181,14 @@ def distances():
     #aaaprint("L")
     
     # Get Left distance    
-    Ldistance = L_read_lidar()
+    Ldistance = L_Read()
     # #aaaprint("L:")
     if Ldistance is None:
         try: 
             Ldistance = LdistanceOld
         except:
             while True:
-                Ldistance = L_read_lidar()
+                Ldistance = L_Read()
                 if Ldistance is not None:
                     break                
     else:
@@ -197,14 +197,14 @@ def distances():
     
     #aaaprint("R")
     # Get Right distance    
-    Rdistance = R_read_lidar()
+    Rdistance = R_Read()
     # #aaaprint("R:")
     if Rdistance is None:
         try: 
             Rdistance = RdistanceOld
         except:
             while True:
-                Rdistance = R_read_lidar()
+                Rdistance = R_Read()
                 if Rdistance is not None:
                     break                
     else:
