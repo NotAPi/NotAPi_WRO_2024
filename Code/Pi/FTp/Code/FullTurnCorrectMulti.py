@@ -61,34 +61,37 @@ def parse_lidar_data(data):
     return None, None
 
 def F_read_lidar():
-    try:
+    while True:
         (count, data) = pi.bb_serial_read(F_RX_PIN)
         if count > 0:
-            # Process data to extract distance
-            return int(data)
-    except Exception as e:
-        print(f"Error reading F LiDAR: {e}")
-    return None
-
-def L_read_lidar():
-    try:
-        (count, data) = pi.bb_serial_read(L_RX_PIN)
-        if count > 0:
-            # Process data to extract distance
-            return int(data)
-    except Exception as e:
-        print(f"Error reading L LiDAR: {e}")
-    return None
+            break
+    if count > 0:
+        distance, strength = parse_lidar_data(data)
+        if distance is not None: # Isn't really needed
+            # #aaaprint(f"DistanceR: {distance} cm, Strength: {strength}")
+            return distance
 
 def R_read_lidar():
-    try:
+    while True:
         (count, data) = pi.bb_serial_read(R_RX_PIN)
         if count > 0:
-            # Process data to extract distance
-            return int(data)
-    except Exception as e:
-        print(f"Error reading R LiDAR: {e}")
-    return None
+            break
+    if count > 0:
+        distance, strength = parse_lidar_data(data)
+        if distance is not None: # Isn't really needed
+            # #aaaprint(f"DistanceR: {distance} cm, Strength: {strength}")
+            return distance
+
+def L_read_lidar():
+    while True:
+        (count, data) = pi.bb_serial_read(L_RX_PIN)
+        if count > 0:
+            break
+    if count > 0:
+        distance, strength = parse_lidar_data(data)
+        if distance is not None: # Isn't really needed
+            # #aaaprint(f"DistanceL: {distance} cm, Strength: {strength}")
+            return distance
         
 def forward(speed=255):
     pi.write(IN1_PIN, 0)
@@ -140,21 +143,12 @@ def F_Loop():
     global Fdistance
     while True:
         with lock:
-            FdistanceTemp1 = None
-            for _ in range(3):
-                FdistanceTemp1 = F_read_lidar()
-                if FdistanceTemp1 is not None and FdistanceTemp1 < 500:
-                    break
-                time.sleep(0.05)
-
-            FdistanceTemp2 = None
-            for _ in range(3):
-                FdistanceTemp2 = F_read_lidar()
-                if FdistanceTemp2 is not None and FdistanceTemp2 < 500:
-                    break
-                time.sleep(0.05)
-
-            if FdistanceTemp1 is not None and FdistanceTemp2 is not None:
+            FdistanceTemp1 = F_read_lidar()
+            time.sleep(0.05)  # Short delay before the second reading
+            FdistanceTemp2 = F_read_lidar()
+            
+            if FdistanceTemp1 is not None and FdistanceTemp2 is not None and FdistanceTemp1 < 500 and FdistanceTemp2 < 500:
+                # Check if the two readings are within 25% of each other
                 lower_bound = FdistanceTemp1 * 0.75
                 upper_bound = FdistanceTemp1 * 1.25
                 if lower_bound <= FdistanceTemp2 <= upper_bound:
@@ -164,28 +158,31 @@ def F_Loop():
                     print(f"Fdistance not updated: {FdistanceTemp1} and {FdistanceTemp2} are not within 25% of each other")
             else:
                 print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
-
+            
             time.sleep(0.1)
 
 def L_Loop():
     global Ldistance
     while True:
         with lock:
+            # Retry mechanism for the first reading
             LdistanceTemp1 = None
-            for _ in range(3):
+            for _ in range(3):  # Retry up to 3 times
                 LdistanceTemp1 = L_read_lidar()
                 if LdistanceTemp1 is not None and LdistanceTemp1 < 500:
                     break
-                time.sleep(0.05)
+                time.sleep(0.05)  # Short delay before retrying
 
+            # Retry mechanism for the second reading
             LdistanceTemp2 = None
-            for _ in range(3):
+            for _ in range(3):  # Retry up to 3 times
                 LdistanceTemp2 = L_read_lidar()
                 if LdistanceTemp2 is not None and LdistanceTemp2 < 500:
                     break
-                time.sleep(0.05)
+                time.sleep(0.05)  # Short delay before retrying
 
             if LdistanceTemp1 is not None and LdistanceTemp2 is not None:
+                # Check if the two readings are within 25% of each other
                 lower_bound = LdistanceTemp1 * 0.75
                 upper_bound = LdistanceTemp1 * 1.25
                 if lower_bound <= LdistanceTemp2 <= upper_bound:
@@ -202,21 +199,12 @@ def R_Loop():
     global Rdistance
     while True:
         with lock:
-            RdistanceTemp1 = None
-            for _ in range(3):
-                RdistanceTemp1 = R_read_lidar()
-                if RdistanceTemp1 is not None and RdistanceTemp1 < 500:
-                    break
-                time.sleep(0.05)
-
-            RdistanceTemp2 = None
-            for _ in range(3):
-                RdistanceTemp2 = R_read_lidar()
-                if RdistanceTemp2 is not None and RdistanceTemp2 < 500:
-                    break
-                time.sleep(0.05)
-
-            if RdistanceTemp1 is not None and RdistanceTemp2 is not None:
+            RdistanceTemp1 = R_read_lidar()
+            time.sleep(0.05)  # Short delay before the second reading
+            RdistanceTemp2 = R_read_lidar()
+            
+            if RdistanceTemp1 is not None and RdistanceTemp2 is not None and RdistanceTemp1 < 500 and RdistanceTemp2 < 500:
+                # Check if the two readings are within 25% of each other
                 lower_bound = RdistanceTemp1 * 0.75
                 upper_bound = RdistanceTemp1 * 1.25
                 if lower_bound <= RdistanceTemp2 <= upper_bound:
@@ -226,7 +214,7 @@ def R_Loop():
                     print(f"Rdistance not updated: {RdistanceTemp1} and {RdistanceTemp2} are not within 25% of each other")
             else:
                 print(f"R Invalid readings: {RdistanceTemp1}, {RdistanceTemp2}")
-
+            
             time.sleep(0.1)
 
 # def R_Loop():
