@@ -16,7 +16,7 @@ def on_press_key(key):
             servo(155)
         elif key.char == 'x':
             backward  # Example for turning servo left
-        elif key.char == 'e':
+        #elif key.char == 'e':
               # Example for turning servo right
     except AttributeError:
         pass
