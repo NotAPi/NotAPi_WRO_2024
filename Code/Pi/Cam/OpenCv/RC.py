@@ -2,52 +2,34 @@ import time
 import pigpio
 import os
 import keyboard
-from lidar_functions import forward, stop, servo, turnRight, turnLeft, forwardm, distances
 
 try:
     os.system("sudo pigpiod")  # Launching GPIO library
     time.sleep(1)  # As it takes some time to launch
 except:
-    #aaaprint("GPIO library already launched")
     pass
-
-# 55------105---155
 
 # Initialize pigpio
 pi = pigpio.pi()
 
-L_RX_PIN = 22 #left recieve pin son serial
+# Define pins
+L_RX_PIN = 22
 R_RX_PIN = 24
 F_RX_PIN = 25
-
-IN1_PIN = 10 #motor pins
+IN1_PIN = 10
 IN2_PIN = 11
 ENA_PIN = 12
-
-SERVO_PIN = 17 #servo pin
-
-
-Laps = 0
-# Try to close the serial connection if it is already open
-try:
-    pi.bb_serial_read_close(R_RX_PIN) 
-    pi.bb_serial_read_close(L_RX_PIN)
-    pi.bb_serial_read_close(F_RX_PIN)
-except:
-    pass
-
-
+SERVO_PIN = 17
 
 # Set up the software serial connection
-pi.set_mode(R_RX_PIN, pigpio.INPUT) 
-pi.bb_serial_read_open(R_RX_PIN, 115200) 
-pi.set_mode(L_RX_PIN, pigpio.INPUT) 
+pi.set_mode(R_RX_PIN, pigpio.INPUT)
+pi.bb_serial_read_open(R_RX_PIN, 115200)
+pi.set_mode(L_RX_PIN, pigpio.INPUT)
 pi.bb_serial_read_open(L_RX_PIN, 115200)
-pi.set_mode(F_RX_PIN, pigpio.INPUT) 
+pi.set_mode(F_RX_PIN, pigpio.INPUT)
 pi.bb_serial_read_open(F_RX_PIN, 115200)
-#aaaprint("init done")
 
-def parse_lidar_data(data): 
+def parse_lidar_data(data):
     if len(data) >= 9 and data[0] == 0x59 and data[1] == 0x59:
         distance = data[2] + data[3] * 256
         strength = data[4] + data[5] * 256
@@ -61,8 +43,7 @@ def F_read_lidar():
             break
     if count > 0:
         distance, strength = parse_lidar_data(data)
-        if distance is not None: # Isn't really needed
-            # #aaaprint(f"DistanceR: {distance} cm, Strength: {strength}")
+        if distance is not None:
             return distance
 
 def R_read_lidar():
@@ -72,8 +53,7 @@ def R_read_lidar():
             break
     if count > 0:
         distance, strength = parse_lidar_data(data)
-        if distance is not None: # Isn't really needed
-            # #aaaprint(f"DistanceR: {distance} cm, Strength: {strength}")
+        if distance is not None:
             return distance
 
 def L_read_lidar():
@@ -83,10 +63,9 @@ def L_read_lidar():
             break
     if count > 0:
         distance, strength = parse_lidar_data(data)
-        if distance is not None: # Isn't really needed
-            # #aaaprint(f"DistanceL: {distance} cm, Strength: {strength}")
+        if distance is not None:
             return distance
-        
+
 def forward(speed=255):
     pi.write(IN1_PIN, 0)
     pi.write(IN2_PIN, 1)
@@ -127,11 +106,7 @@ def forwardm(distance=1):
     time.sleep(6.6*distance)
 
 def distances():
-    
-    # Get Front distance    
-    #aaaprint("F")
     Fdistance = F_read_lidar()
-    # #aaaprint("F:")
     if Fdistance is None:
         try: 
             Fdistance = FdistanceOld
@@ -142,13 +117,9 @@ def distances():
                     break                
     else:
         FdistanceOld = Fdistance
-    #aaaprint("F done")
-    
-    #aaaprint("L")
-    
+
     # Get Left distance    
     Ldistance = L_read_lidar()
-    # #aaaprint("L:")
     if Ldistance is None:
         try: 
             Ldistance = LdistanceOld
@@ -159,24 +130,20 @@ def distances():
                     break                
     else:
         LdistanceOld = Ldistance
-    #aaaprint("L done")
-    
-    #aaaprint("R")
+
     # Get Right distance    
     Rdistance = R_read_lidar()
-    # #aaaprint("R:")
     if Rdistance is None:
         try: 
             Rdistance = RdistanceOld
-        except: #si danone
+        except:
             while True:
                 Rdistance = R_read_lidar()
                 if Rdistance is not None:
                     break                
     else:
         RdistanceOld = Rdistance
-    #aaaprint("R done")
-    #aaaprint("return")
+
     return Ldistance, Rdistance, Fdistance
 
 def turnLeftFull():
@@ -185,25 +152,17 @@ def turnLeftFull():
     turnLeft(90)
     
     servo()
-    # forwardm(0.5)
-
     stop()
     time.sleep(0.05)
-    #aaaprint("read")
     forward()
     time.sleep(0.1)
     Ldistance, Rdistance, Fdistance = distances()
-    #aaaprint("read done")
     stop()
-    #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
 
     while Ldistance + Rdistance > 150:
         forward()
         Ldistance, Rdistance, Fdistance = distances()
-        #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
-        # forward()        
         time.sleep(0.2)
-    #aaaprint("Stop")
     time.sleep(0.05)    
     stop()
     
@@ -213,25 +172,17 @@ def turnRightFull():
     turnRight(90)
     
     servo()
-    # forwardm(0.5)
-
     stop()
     time.sleep(0.05)
-    #aaaprint("read")
     forward()
     time.sleep(0.1)
     Ldistance, Rdistance, Fdistance = distances()
-    #aaaprint("read done")
     stop()
-    #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
 
     while Ldistance + Rdistance > 150:
         forward()
         Ldistance, Rdistance, Fdistance = distances()
-        #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
-        # forward()        
         time.sleep(0.2)
-    #aaaprint("Stop")
     time.sleep(0.05)    
     stop()
 
