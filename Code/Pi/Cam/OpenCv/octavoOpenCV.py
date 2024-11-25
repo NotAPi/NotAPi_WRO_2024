@@ -121,7 +121,7 @@ while True:
     draw_centroids_and_contours(red_mask, image, (0, 0, 255), green_mask, (0, 255, 0))
     forward()
 
-    """
+    
     cv2.line(image, p1_izquierda, p2_izquierda, (0, 255, 255), 2)
     cv2.line(image, p1_derecha, p2_derecha, (0, 255, 255), 2)
 
@@ -129,7 +129,7 @@ while True:
     cv2.imshow('Green Mask', green_mask)
     cv2.imshow('original', image)
 
-    """
+    
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
