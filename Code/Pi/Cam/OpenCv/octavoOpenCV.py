@@ -2,14 +2,34 @@ import cv2
 import numpy as np
 from picamera2 import Picamera2
 import time
+import pigpio
+import os
+
+try:
+    os.system("sudo pigpiod")  # Launching GPIO library
+    time.sleep(1)  # As it takes some time to launch
+except:
+    #aaaprint("GPIO library already launched")
+    pass
 
 # Initialize the Raspberry Pi camera
 picam2 = Picamera2()
 picam2.configure(picam2.create_preview_configuration(main={"size": (640, 480)}))
 picam2.start()
 
+IN1_PIN = 10 #motor pins
+IN2_PIN = 11
+ENA_PIN = 12
+
+SERVO_PIN = 17 #servo pin
+
 # Allow the camera to warm up
 time.sleep(0.1)
+
+def forward(speed=255):
+    pi.write(IN1_PIN, 0)
+    pi.write(IN2_PIN, 1)
+    pi.set_PWM_dutycycle(ENA_PIN, speed)
 
 while True:
     image_bgr = picam2.capture_array()
@@ -28,14 +48,9 @@ while True:
     hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
     lower_red1 = np.array([120, 100, 100])
     upper_red1 = np.array([150, 255, 255])
-    #lower_red2 = np.array([160, 100, 100])
-    #upper_red2 = np.array([179, 255, 255])
     lower_green = np.array([35, 100, 50])
     upper_green = np.array([85, 255, 255])
 
-    #mask_red1 = cv2.inRange(hsv_image, lower_red1, upper_red1)xd
-    #mask_red2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
-    #red_mask = cv2.bitwise_or(mask_red1, mask_red2) 
     red_mask = cv2.inRange(hsv_image, lower_red1, upper_red1)
     green_mask = cv2.inRange(hsv_image, lower_green, upper_green)
 
@@ -101,12 +116,17 @@ while True:
 
 
     draw_centroids_and_contours(red_mask, image, (0, 0, 255), green_mask, (0, 255, 0))
+    forward()
+
+    """
     cv2.line(image, p1_izquierda, p2_izquierda, (0, 255, 255), 2)
     cv2.line(image, p1_derecha, p2_derecha, (0, 255, 255), 2)
 
     cv2.imshow('Red Mask', red_mask)
     cv2.imshow('Green Mask', green_mask)
     cv2.imshow('original', image)
+
+    """
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
