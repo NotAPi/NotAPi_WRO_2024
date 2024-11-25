@@ -53,7 +53,7 @@ def parse_lidar_data(data):
         return distance, strength
     return None, None
 
-def F_Read():
+def F_read_lidar():
     while True:
         (count, data) = pi.bb_serial_read(F_RX_PIN)
         if count > 0:
@@ -64,7 +64,7 @@ def F_Read():
             # #aaaprint(f"DistanceR: {distance} cm, Strength: {strength}")
             return distance
 
-def R_Read():
+def R_read_lidar():
     while True:
         (count, data) = pi.bb_serial_read(R_RX_PIN)
         if count > 0:
@@ -75,7 +75,7 @@ def R_Read():
             # #aaaprint(f"DistanceR: {distance} cm, Strength: {strength}")
             return distance
 
-def L_Read():
+def L_read_lidar():
     while True:
         (count, data) = pi.bb_serial_read(L_RX_PIN)
         if count > 0:
@@ -90,7 +90,7 @@ def L_Read():
         
 def F_Read():
     global Fdistance
-    FdistanceTemp1 = F_Read()
+    FdistanceTemp1 = F_read_lidar()
     if FdistanceTemp1 is not None and FdistanceTemp1 < 500:
             Fdistance = FdistanceTemp1
             print(f"Fdistance updated: {Fdistance}")
@@ -101,7 +101,7 @@ def F_Read():
 
 def L_Read():
     global Ldistance
-    LdistanceTemp1 = L_Read()
+    LdistanceTemp1 = L_read_lidar()
     if LdistanceTemp1 is not None and LdistanceTemp1 < 500:
             Ldistance = LdistanceTemp1
             print(f"Ldistance updated: {Ldistance}")
@@ -112,7 +112,7 @@ def L_Read():
 
 def R_Read():
     global Rdistance
-    RdistanceTemp1 = R_Read()
+    RdistanceTemp1 = R_read_lidar()
     if RdistanceTemp1 is not None and RdistanceTemp1 < 500:
             Rdistance = RdistanceTemp1
             print(f"Rdistance updated: {Fdistance}")
