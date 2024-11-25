@@ -1,7 +1,12 @@
 import time
 import pigpio
 import os
-import keyboard
+from pynput import keyboard
+
+# Start the keyboard listener
+listener = keyboard.Listener(on_press=on_press_key)
+listener.start()
+
 
 try:
     os.system("sudo pigpiod")  # Launching GPIO library
@@ -187,22 +192,26 @@ def turnRightFull():
     stop()
 
 # Define the key press actions
-def on_press_key(event):
-    if event.name == 'w':
-        forward()
-    elif event.name == 's':
-        stop()
-    elif event.name == 'a':
-        turnLeft()
-    elif event.name == 'd':
-        turnRight()
-    elif event.name == 'q':
-        servo(55)  # Example for turning servo left
-    elif event.name == 'e':
-        servo(155)  # Example for turning servo right
+def on_press_key(key):
+    try:
+        if key.char == 'w':
+            forward()
+        elif key.char == 's':
+            stop()
+        elif key.char == 'a':
+            turnLeft()
+        elif key.char == 'd':
+            turnRight()
+        elif key.char == 'q':
+            servo(55)  # Example for turning servo left
+        elif key.char == 'e':
+            servo(155)  # Example for turning servo right
+    except AttributeError:
+        pass
 
 # Register the key press events
-keyboard.on_press(on_press_key)
+listener = keyboard.Listener(on_press=on_press_key)
+listener.start()
 
 try:
     while True:
