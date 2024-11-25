@@ -115,11 +115,13 @@ while True:
 
             
 
-            cv2.arrowedLine(image, (bloque_centro_x,bloque_cercano), (objetivo, bloque_cercano), bloque_color, thickness=5, line_type=cv2.LINE_8, shift=0, tipLength=0.1)
+            cv2.arrowedLine(image, (bloque_centro_x, bloque_cercano), (objetivo, bloque_cercano), bloque_color, thickness=5, line_type=cv2.LINE_8, shift=0, tipLength=0.1)
+            arrow_length = abs(bloque_centro_x - objetivo)
+            print(f"Arrow length: {arrow_length}")
 
 
     draw_centroids_and_contours(red_mask, image, (0, 0, 255), green_mask, (0, 255, 0))
-    forward()
+    #forward()
 
     
     cv2.line(image, p1_izquierda, p2_izquierda, (0, 255, 255), 2)
