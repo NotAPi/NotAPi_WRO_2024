@@ -26,6 +26,12 @@ ENA_PIN = 12
 
 SERVO_PIN = 17
 
+Ldistance = 0
+Rdistance = 0
+Fdistance = 0
+
+lock = threading.Lock()
+
 
 Laps = 0
 # Try to close the serial connection if it is already open
@@ -136,26 +142,29 @@ def distance_loop():
 def F_Loop():
     global Fdistance
     while True:
-        FdistanceTemp = F_read_lidar()
-        if FdistanceTemp is not None:
-            Fdistance = FdistanceTemp
-        time.sleep(0.1)
+        with lock:
+            FdistanceTemp = F_read_lidar()
+            if FdistanceTemp is not None:
+                Fdistance = FdistanceTemp
+            time.sleep(0.1)
 
 def L_Loop():
     global Ldistance
     while True:
-        LdistanceTemp = L_read_lidar()
-        if LdistanceTemp is not None:
-            Ldistance = LdistanceTemp
-        time.sleep(0.1)
+        with lock:
+            LdistanceTemp = L_read_lidar()
+            if LdistanceTemp is not None:
+                Ldistance = LdistanceTemp
+            time.sleep(0.1)
 
 def R_Loop():
     global Rdistance
     while True:
-        RdistanceTemp = R_read_lidar()
-        if RdistanceTemp is not None:
-            Rdistance = RdistanceTemp
-        time.sleep(0.1)
+        with lock:
+            RdistanceTemp = R_read_lidar()
+            if RdistanceTemp is not None:
+                Rdistance = RdistanceTemp
+            time.sleep(0.1)
 
 def distances():
     global Ldistance, Rdistance, Fdistance
@@ -263,20 +272,7 @@ def turnRightFull():
     time.sleep(0.05)    
     stop()
 
-        
-if __name__ == "__main__":
-    R_loop_thread = threading.Thread(target=R_Loop)
-    R_loop_thread.daemon = True
-    R_loop_thread.start()
-    
-    L_loop_thread = threading.Thread(target=L_Loop)
-    L_loop_thread.daemon = True
-    L_loop_thread.start()
-    
-    F_loop_thread = threading.Thread(target=F_Loop)
-    F_loop_thread.daemon = True
-    F_loop_thread.start()
-    
+def main():
     global Ldistance, Rdistance, Fdistance
     try:
         servo()
@@ -350,3 +346,22 @@ if __name__ == "__main__":
         pi.bb_serial_read_close(F_RX_PIN)  # Close the serial connection on exit
 
         pi.stop()
+        
+if __name__ == "__main__":
+    R_loop_thread = threading.Thread(target=R_Loop)
+    L_loop_thread = threading.Thread(target=L_Loop)
+    F_loop_thread = threading.Thread(target=F_Loop)
+    main_thread = threading.Thread(target=main)
+    
+    R_loop_thread.start()
+    L_loop_thread.start()
+    F_loop_thread.start()
+    main_thread.start()
+    
+    R_loop_thread.join()
+    L_loop_thread.join()
+    F_loop_thread.join()
+    main_thread.join()
+    
+    
+    
