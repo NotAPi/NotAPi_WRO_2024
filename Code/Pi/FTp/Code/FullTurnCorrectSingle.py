@@ -91,66 +91,36 @@ def L_read_lidar():
 def F_Read():
     global Fdistance
     FdistanceTemp1 = F_read_lidar()
-    time.sleep(0.05)  # Short delay before the second reading
-    FdistanceTemp2 = F_read_lidar()
-    
-    if FdistanceTemp1 is not None and FdistanceTemp2 is not None and FdistanceTemp1 < 500 and FdistanceTemp2 < 500:
-        # Check if the two readings are within 25% of each other
-        lower_bound = FdistanceTemp1 + 40
-        upper_bound = FdistanceTemp1 + 40
-        if lower_bound <= FdistanceTemp2 <= upper_bound:
-            with lock:
-                Fdistance = FdistanceTemp2
-                print(f"Fdistance updated: {Fdistance}")
-        else:
-            print(f"Fdistance not updated: {FdistanceTemp1} and {FdistanceTemp2} are not within 25% of each other")
+    if FdistanceTemp1 is not None and FdistanceTemp1 < 500:
+            Fdistance = FdistanceTemp1
+            print(f"Fdistance updated: {Fdistance}")
     else:
-        print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
+        print(f"F Invalid readings: {FdistanceTemp1}")
     
     time.sleep(0.1)
 
 def L_Read():
     global Ldistance
     LdistanceTemp1 = L_read_lidar()
-    time.sleep(0.05)  # Short delay before the second reading
-    LdistanceTemp2 = L_read_lidar()
-    
-    if LdistanceTemp1 is not None and LdistanceTemp2 is not None and LdistanceTemp1 < 500 and LdistanceTemp2 < 500:
-        # Check if the two readings are within 25% of each other
-        lower_bound = LdistanceTemp1 + 40
-        upper_bound = LdistanceTemp1 + 40
-        if lower_bound <= LdistanceTemp2 <= upper_bound:
-            with lock:
-                Ldistance = LdistanceTemp2
-                print(f"Ldistance updated: {Ldistance}")
-        else:
-            print(f"Ldistance not updated: {LdistanceTemp1} and {LdistanceTemp2} are not within 25% of each other")
+    if LdistanceTemp1 is not None and LdistanceTemp1 < 500:
+            Ldistance = LdistanceTemp1
+            print(f"Ldistance updated: {Ldistance}")
     else:
-        print(f"L Invalid readings: {LdistanceTemp1}, {LdistanceTemp2}")
+        print(f"L Invalid readings: {LdistanceTemp1}")
     
     time.sleep(0.1)
 
 def R_Read():
     global Rdistance
     RdistanceTemp1 = R_read_lidar()
-    time.sleep(0.05)  # Short delay before the second reading
-    RdistanceTemp2 = R_read_lidar()
-
-    if RdistanceTemp1 is not None and RdistanceTemp2 is not None and RdistanceTemp1 < 500 and RdistanceTemp2 < 500:
-        # Check if the two readings are within 25% of each other
-        lower_bound = RdistanceTemp1 - 40
-        upper_bound = RdistanceTemp1 + 40
-        if lower_bound <= RdistanceTemp2 <= upper_bound:
-            with lock:
-                Rdistance = RdistanceTemp2
-                print(f"Rdistance updated: {Rdistance}")
-        else:
-            print(f"Rdistance not updated: {RdistanceTemp1} and {RdistanceTemp2} are not within 25% of each other")
+    if RdistanceTemp1 is not None and RdistanceTemp1 < 500:
+            Rdistance = RdistanceTemp1
+            print(f"Rdistance updated: {Fdistance}")
     else:
-        print(f"R Invalid readings: {RdistanceTemp1}, {RdistanceTemp2}")
-
+        print(f"R Invalid readings: {RdistanceTemp1}")
+    
     time.sleep(0.1)
-        
+
 def forward(speed=255):
     pi.write(IN1_PIN, 0)
     pi.write(IN2_PIN, 1)
@@ -194,14 +164,14 @@ def distances():
     
     # Get Front distance    
     #aaaprint("F")
-    Fdistance = F_Read()
+    Fdistance = F_read_lidar()
     # #aaaprint("F:")
     if Fdistance is None:
         try: 
             Fdistance = FdistanceOld
         except:
             while True:
-                Fdistance = F_Read()
+                Fdistance = F_read_lidar()
                 if Fdistance is not None:
                     break                
     else:
@@ -211,14 +181,14 @@ def distances():
     #aaaprint("L")
     
     # Get Left distance    
-    Ldistance = L_Read()
+    Ldistance = L_read_lidar()
     # #aaaprint("L:")
     if Ldistance is None:
         try: 
             Ldistance = LdistanceOld
         except:
             while True:
-                Ldistance = L_Read()
+                Ldistance = L_read_lidar()
                 if Ldistance is not None:
                     break                
     else:
@@ -227,14 +197,14 @@ def distances():
     
     #aaaprint("R")
     # Get Right distance    
-    Rdistance = R_Read()
+    Rdistance = R_read_lidar()
     # #aaaprint("R:")
     if Rdistance is None:
         try: 
             Rdistance = RdistanceOld
         except:
             while True:
-                Rdistance = R_Read()
+                Rdistance = R_read_lidar()
                 if Rdistance is not None:
                     break                
     else:
