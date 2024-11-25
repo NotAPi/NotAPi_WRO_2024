@@ -166,50 +166,13 @@ def distances():
     #aaaprint("F")
     Fdistance = F_Read()
     # #aaaprint("F:")
-    if Fdistance is None:
-        try: 
-            Fdistance = FdistanceOld
-        except:
-            while True:
-                Fdistance = F_Read()
-                if Fdistance is not None:
-                    break                
-    else:
-        FdistanceOld = Fdistance
-    #aaaprint("F done")
-    
     #aaaprint("L")
     
     # Get Left distance    
     Ldistance = L_Read()
-    # #aaaprint("L:")
-    if Ldistance is None:
-        try: 
-            Ldistance = LdistanceOld
-        except:
-            while True:
-                Ldistance = L_Read()
-                if Ldistance is not None:
-                    break                
-    else:
-        LdistanceOld = Ldistance
-    #aaaprint("L done")
-    
-    #aaaprint("R")
-    # Get Right distance    
+    # #aaapr
     Rdistance = R_Read()
-    # #aaaprint("R:")
-    if Rdistance is None:
-        try: 
-            Rdistance = RdistanceOld
-        except:
-            while True:
-                Rdistance = R_Read()
-                if Rdistance is not None:
-                    break                
-    else:
-        RdistanceOld = Rdistance
-    #aaaprint("R done")
+    
     #aaaprint("return")
     return Ldistance, Rdistance, Fdistance
 
