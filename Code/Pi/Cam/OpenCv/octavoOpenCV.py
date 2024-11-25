@@ -132,10 +132,9 @@ while True:
     
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
-
-    pi.write(IN1_PIN, 0)
-    pi.write(IN2_PIN, 0)
-    pi.set_PWM_dutycycle(ENA_PIN, 0)
+        pi.write(IN1_PIN, 0)
+        pi.write(IN2_PIN, 0)
+        pi.set_PWM_dutycycle(ENA_PIN, 0)
         break
 
 cv2.destroyAllWindows()
