@@ -25,6 +25,11 @@ def forward(speed=255):
     pi.write(IN2_PIN, 1)
     pi.set_PWM_dutycycle(ENA_PIN, speed)
 
+def backward(speed=255):
+    pi.write(IN1_PIN, 1)
+    pi.write(IN2_PIN, 0)
+    pi.set_PWM_dutycycle(ENA_PIN, speed)
+
 def stop():
     pi.write(IN1_PIN, 0)
     pi.write(IN2_PIN, 0)
@@ -46,7 +51,7 @@ def on_press_key(key):
         elif key.char == 'd':
             servo(155)
         elif key.char == 'x':
-            stop()  # Example for stopping
+            backward()
         elif key.char == 'e':
             servo(105)
     except AttributeError:
