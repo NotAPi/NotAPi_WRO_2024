@@ -115,7 +115,7 @@ def R_Read():
     RdistanceTemp1 = R_read_lidar()
     if RdistanceTemp1 is not None and RdistanceTemp1 < 500:
             Rdistance = RdistanceTemp1
-            print(f"Rdistance updated: {Fdistance}")
+            print(f"Rdistance updated: {Rdistance}")
     else:
         print(f"R Invalid readings: {RdistanceTemp1}")
     
