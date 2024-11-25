@@ -143,10 +143,21 @@ def F_Loop():
     global Fdistance
     while True:
         with lock:
-            FdistanceTemp = F_read_lidar()
-            if FdistanceTemp is not None and FdistanceTemp < 500:
-                Fdistance = FdistanceTemp
-                print(f"Fdistance updated: {Fdistance}")
+            FdistanceTemp1 = F_read_lidar()
+            time.sleep(0.05)  # Short delay before the second reading
+            FdistanceTemp2 = F_read_lidar()
+            
+            if FdistanceTemp1 is not None and FdistanceTemp2 is not None and FdistanceTemp1 < 500 and FdistanceTemp2 < 500:
+                # Check if the two readings are within 25% of each other
+                lower_bound = FdistanceTemp1 * 0.75
+                upper_bound = FdistanceTemp1 * 1.25
+                if lower_bound <= FdistanceTemp2 <= upper_bound:
+                    Fdistance = FdistanceTemp2
+                    print(f"Fdistance updated: {Fdistance}")
+                else:
+                    print(f"Fdistance not updated: {FdistanceTemp1} and {FdistanceTemp2} are not within 25% of each other")
+            else:
+                print(f"Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
             
             time.sleep(0.1)
 
@@ -154,10 +165,21 @@ def L_Loop():
     global Ldistance
     while True:
         with lock:
-            LdistanceTemp = L_read_lidar()
-            if LdistanceTemp is not None and LdistanceTemp < 500:
-                Ldistance = LdistanceTemp
-                print(f"Ldistance updated: {Ldistance}")
+            LdistanceTemp1 = L_read_lidar()
+            time.sleep(0.05)  # Short delay before the second reading
+            LdistanceTemp2 = L_read_lidar()
+            
+            if LdistanceTemp1 is not None and LdistanceTemp2 is not None and LdistanceTemp1 < 500 and LdistanceTemp2 < 500:
+                # Check if the two readings are within 25% of each other
+                lower_bound = LdistanceTemp1 * 0.75
+                upper_bound = LdistanceTemp1 * 1.25
+                if lower_bound <= LdistanceTemp2 <= upper_bound:
+                    Ldistance = LdistanceTemp2
+                    print(f"Ldistance updated: {Ldistance}")
+                else:
+                    print(f"Ldistance not updated: {LdistanceTemp1} and {LdistanceTemp2} are not within 25% of each other")
+            else:
+                print(f"Invalid readings: {LdistanceTemp1}, {LdistanceTemp2}")
             
             time.sleep(0.1)
 
@@ -165,12 +187,34 @@ def R_Loop():
     global Rdistance
     while True:
         with lock:
-            RdistanceTemp = R_read_lidar()
-            if RdistanceTemp is not None and RdistanceTemp < 500:
-                Rdistance = RdistanceTemp
-                print(f"Rdistance updated: {Rdistance}")
-
+            RdistanceTemp1 = R_read_lidar()
+            time.sleep(0.05)  # Short delay before the second reading
+            RdistanceTemp2 = R_read_lidar()
+            
+            if RdistanceTemp1 is not None and RdistanceTemp2 is not None and RdistanceTemp1 < 500 and RdistanceTemp2 < 500:
+                # Check if the two readings are within 25% of each other
+                lower_bound = RdistanceTemp1 * 0.75
+                upper_bound = RdistanceTemp1 * 1.25
+                if lower_bound <= RdistanceTemp2 <= upper_bound:
+                    Rdistance = RdistanceTemp2
+                    print(f"Rdistance updated: {Rdistance}")
+                else:
+                    print(f"Rdistance not updated: {RdistanceTemp1} and {RdistanceTemp2} are not within 25% of each other")
+            else:
+                print(f"Invalid readings: {RdistanceTemp1}, {RdistanceTemp2}")
+            
             time.sleep(0.1)
+
+# def R_Loop():
+#     global Rdistance
+#     while True:
+#         with lock:
+#             RdistanceTemp = R_read_lidar()
+#             if RdistanceTemp is not None and RdistanceTemp < 500:
+#                 Rdistance = RdistanceTemp
+#                 print(f"Rdistance updated: {Rdistance}")
+
+#             time.sleep(0.1)
 
 def distances():
     global Ldistance, Rdistance, Fdistance
