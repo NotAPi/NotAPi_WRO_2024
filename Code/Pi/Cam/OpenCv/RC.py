@@ -211,23 +211,7 @@ def turnRightFull():
     time.sleep(0.05)    
     stop()
 
-# Define the key press actions
-def on_press_key(key):
-    try:
-        if key.char == 'w':
-            forward()
-        elif key.char == 's':
-            stop()
-        elif key.char == 'a':
-            turnLeft()
-        elif key.char == 'd':
-            turnRight()
-        elif key.char == 'q':
-            servo(55)  # Example for turning servo left
-        elif key.char == 'e':
-            servo(155)  # Example for turning servo right
-    except AttributeError:
-        pass
+
 
 # Register the key press events
 listener = keyboard.Listener(on_press=on_press_key)
