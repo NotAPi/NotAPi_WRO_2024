@@ -23,6 +23,9 @@ ENA_PIN = 12
 
 SERVO_PIN = 17 #servo pin
 
+# Initialize pigpio
+pi = pigpio.pi()
+
 # Allow the camera to warm up
 time.sleep(0.1)
 
