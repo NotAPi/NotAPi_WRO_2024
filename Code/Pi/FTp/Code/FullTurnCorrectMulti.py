@@ -132,22 +132,44 @@ def distance_loop():
         Ldistance, Rdistance, Fdistance = distances()
         print("L " + str(Ldistance) + " R " + str(Rdistance) + " F " + str(Fdistance))
         time.sleep(0.2)
+
+def F_Loop():
+    global Fdistance
+    while True:
+        FdistanceTemp = F_read_lidar()
+        if FdistanceTemp is not None:
+            Fdistance = FdistanceTemp
+        time.sleep(0.1)
+
+def L_Loop():
+    global Ldistance
+    while True:
+        LdistanceTemp = L_read_lidar()
+        if LdistanceTemp is not None:
+            Ldistance = LdistanceTemp
+        time.sleep(0.1)
+
+def R_Loop():
+    global Rdistance
+    while True:
+        RdistanceTemp = R_read_lidar()
+        if RdistanceTemp is not None:
+            Rdistance = RdistanceTemp
+        time.sleep(0.1)
+
 def distances():
-    
+    global Ldistance, Rdistance, Fdistance
     # Get Front distance    
     #aaaprint("F")
-    Fdistance = F_read_lidar()
+    FdistanceTemp = F_read_lidar()
     # #aaaprint("F:")
-    if Fdistance is None:
-        try: 
-            Fdistance = FdistanceOld
-        except:
-            while True:
-                Fdistance = F_read_lidar()
-                if Fdistance is not None:
-                    break                
+    if Fdistance is not None:
+        Fdistance = FdistanceTemp               
     else:
-        FdistanceOld = Fdistance
+        while True:
+            Fdistance = F_read_lidar()
+            if Fdistance is not None:
+                break
     #aaaprint("F done")
     
     #aaaprint("L")
@@ -243,9 +265,18 @@ def turnRightFull():
 
         
 if __name__ == "__main__":
-    distances_thread = threading.Thread(target=distance_loop)
-    distances_thread.daemon = True
-    distances_thread.start()
+    R_loop_thread = threading.Thread(target=R_Loop)
+    R_loop_thread.daemon = True
+    R_loop_thread.start()
+    
+    L_loop_thread = threading.Thread(target=L_Loop)
+    L_loop_thread.daemon = True
+    L_loop_thread.start()
+    
+    F_loop_thread = threading.Thread(target=F_Loop)
+    F_loop_thread.daemon = True
+    F_loop_thread.start()
+    
     global Ldistance, Rdistance, Fdistance
     try:
         servo()
