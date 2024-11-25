@@ -398,20 +398,28 @@ def main():
         pi.stop()
         
 if __name__ == "__main__":
-    R_loop_thread = threading.Thread(target=R_Loop)
-    L_loop_thread = threading.Thread(target=L_Loop)
-    F_loop_thread = threading.Thread(target=F_Loop)
-    main_thread = threading.Thread(target=main)
-    
-    R_loop_thread.start()
-    L_loop_thread.start()
-    F_loop_thread.start()
-    main_thread.start()
-    
-    R_loop_thread.join()
-    L_loop_thread.join()
-    F_loop_thread.join()
-    main_thread.join()
-    
+    try:
+            
+        R_loop_thread = threading.Thread(target=R_Loop)
+        L_loop_thread = threading.Thread(target=L_Loop)
+        F_loop_thread = threading.Thread(target=F_Loop)
+        main_thread = threading.Thread(target=main)
+        
+        R_loop_thread.start()
+        L_loop_thread.start()
+        F_loop_thread.start()
+        main_thread.start()
+        
+        R_loop_thread.join()
+        L_loop_thread.join()
+        F_loop_thread.join()
+        main_thread.join()
+    except KeyboardInterrupt:
+        stop()
+        pi.bb_serial_read_close(R_RX_PIN)  # Close the serial connection on exit
+        pi.bb_serial_read_close(L_RX_PIN)  # Close the serial connection on exit
+        pi.bb_serial_read_close(F_RX_PIN)  # Close the serial connection on exit
+
+        pi.stop()    
     
     
