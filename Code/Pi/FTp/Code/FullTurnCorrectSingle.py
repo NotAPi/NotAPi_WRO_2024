@@ -330,7 +330,7 @@ def main():
         giros = 0
         while True:
             Ldistance = call_in_background(L_Loop)
-            Rdistance = call_in_background(R    _Loop)
+            Rdistance = call_in_background(R_Loop)
             Fdistance = call_in_background(F_Loop)
             while Ldistance < 100 or Rdistance < 100:
                 forward()
