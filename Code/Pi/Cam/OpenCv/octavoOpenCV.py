@@ -117,6 +117,7 @@ while True:
                 diferencia_izq = bloque_centro_x - x_interseccion_izq
 
                 diferencia_izq_normalizada = 105 + (diferencia_izq / anchura) * (155 - 55)
+                diferencia_izq_normalizada = max(55, min(155, diferencia_izq_normalizada))
                 cv2.putText(image, f"diferencia_izq: {diferencia_izq_normalizada}", (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
                 servo(diferencia_izq_normalizada)
 
