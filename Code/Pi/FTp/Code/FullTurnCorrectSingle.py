@@ -159,7 +159,7 @@ def F_Loop():
                 FdistanceTemp1 = F_read_lidar()
             if FdistanceTemp2 is None or FdistanceTemp2 > 500:
                 FdistanceTemp2 = F_read_lidar()
-            print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
+            # print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
 
         # Return the minimum of the two valid readings
         return min(FdistanceTemp1, FdistanceTemp2)
@@ -175,7 +175,7 @@ def L_Loop():
                 LdistanceTemp1 = L_read_lidar()
             if LdistanceTemp2 is None or LdistanceTemp2 > 500:
                 LdistanceTemp2 = L_read_lidar()
-            print(f"L Invalid readings: {LdistanceTemp1}, {LdistanceTemp2}")
+            # print(f"L Invalid readings: {LdistanceTemp1}, {LdistanceTemp2}")
 
         # Return the minimum of the two valid readings
         return min(LdistanceTemp1, LdistanceTemp2)
@@ -191,7 +191,7 @@ def R_Loop():
                 RdistanceTemp1 = R_read_lidar()
             if RdistanceTemp2 is None or RdistanceTemp2 > 500:
                 RdistanceTemp2 = R_read_lidar()
-            print(f"R Invalid readings: {RdistanceTemp1}, {RdistanceTemp2}")
+            # print(f"R Invalid readings: {RdistanceTemp1}, {RdistanceTemp2}")
 
         # Return the minimum of the two valid readings
         return min(RdistanceTemp1, RdistanceTemp2)
@@ -330,7 +330,7 @@ def main():
         giros = 0
         while True:
             Ldistance = call_in_background(L_Loop)
-            Rdistance = call_in_background(R_Loop)
+            Rdistance = call_in_background(R    _Loop)
             Fdistance = call_in_background(F_Loop)
             while Ldistance < 100 or Rdistance < 100:
                 forward()
