@@ -49,10 +49,10 @@ while True:
 
 
     altura, anchura = image.shape[:2]  # Obtener las dimensiones de la imagen
-    p1_izquierda = (anchura // 3, 0) 
-    p2_izquierda = (0, altura//2)
-    p1_derecha = (2 * anchura // 3, 0) 
-    p2_derecha = (anchura, altura//2) 
+    p1_izquierda = (anchura // 2, 0) 
+    p2_izquierda = (0, altura)
+    p1_derecha = (2 * anchura // 2, 0) 
+    p2_derecha = (anchura, altura) 
 
     hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
     lower_red1 = np.array([120, 100, 100])
@@ -148,7 +148,7 @@ while True:
 
 
     draw_centroids_and_contours(red_mask, image, (0, 0, 255), green_mask, (0, 255, 0))
-    forward() #Ve hacia adelante
+    #forward() #Ve hacia adelante
 
     
     cv2.line(image, p1_izquierda, p2_izquierda, (0, 255, 255), 2)
