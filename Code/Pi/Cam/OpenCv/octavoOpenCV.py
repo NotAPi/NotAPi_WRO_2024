@@ -135,6 +135,8 @@ while True:
             angulo_objetivo = 55 + (arrow_length / anchura) * (155 - 55)
             cv2.putText(image, f"servo: {angulo_objetivo}", (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
             #servo(angulo_objetivo)
+        else:
+            servo(105)
 
 
 
