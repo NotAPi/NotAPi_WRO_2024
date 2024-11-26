@@ -142,19 +142,17 @@ def distance_loop():
 def F_Loop():
     while True:
         FdistanceTemp1 = F_read_lidar()
-        # FdistanceTemp2 = F_read_lidar()
+        FdistanceTemp2 = F_read_lidar()
 
-        if FdistanceTemp1 is None or 0 == FdistanceTemp1 or FdistanceTemp1 > 500:
-            FdistanceTemp1 = F_read_lidar()
-        elif FdistanceTemp1 > 100:
-            FdistanceTemp2 = F_read_lidar()
-            if FdistanceTemp2 is not None and 0 < FdistanceTemp2 < 500:
-                break
-        if FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500:
-            FdistanceTemp2 = F_read_lidar()
-        print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
+        # Fetry mechanism for invalid readings
+        while (FdistanceTemp1 is None or 0 < FdistanceTemp1 > 500) or (FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500):
+            if FdistanceTemp1 is None or 0 < FdistanceTemp1 > 500:
+                FdistanceTemp1 = F_read_lidar()
+            if FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500:
+                FdistanceTemp2 = F_read_lidar()
+            print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
 
-        # Return the minimum of the two valid readings
+        # Feturn the minimum of the two valid readings
         return min(FdistanceTemp1, FdistanceTemp2)
 
 def L_Loop():
