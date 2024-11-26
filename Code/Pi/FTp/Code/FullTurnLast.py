@@ -128,12 +128,8 @@ def forwardm(distance=1):
     time.sleep(6.6*distance)
 
 def distances():
-    
     # Get Front distance    
-    #aaaprint("F")
     Fdistance = F_read_lidar()
-    # #aaaprint("F:")
-    
     while Fdistance is None or Fdistance > 500 or Fdistance <= 0:
         Fdistance = F_read_lidar()
         if Fdistance is not None and Fdistance < 500 and Fdistance > 0:
@@ -142,47 +138,33 @@ def distances():
                 if Fdistance is not None and Fdistance < 500 and Fdistance > 0:
                     break
             break
-            
-    # if Fdistance is None:
-    #     try: 
-    #         Fdistance = FdistanceOld
-    #     except:
-    #         while True:
-    #             Fdistance = F_read_lidar()
-    #             if Fdistance is not None:
-    #                 break                
-    # else:
-    #     FdistanceOld = Fdistance
-    #aaaprint("F done")
-    
-    #aaaprint("L")
-    
+
     # Get Left distance    
     Ldistance = L_read_lidar()
-    # #aaaprint("L:")
     while Ldistance is None or Ldistance > 500 or Ldistance <= 0:
-        Ldistance = F_read_lidar()
+        Ldistance = L_read_lidar()
         if Ldistance is not None and Ldistance < 500 and Ldistance > 0:
             if Ldistance < 100:
-                Ldistance = F_read_lidar()
+                Ldistance = L_read_lidar()
                 if Ldistance is not None and Ldistance < 500 and Ldistance > 0:
                     break
             break
-    
-    #aaaprint("R")
+
     # Get Right distance    
     Rdistance = R_read_lidar()
-    # #aaaprint("R:")
     while Rdistance is None or Rdistance > 500 or Rdistance <= 0:
-        Rdistance = F_read_lidar()
+        Rdistance = R_read_lidar()
         if Rdistance is not None and Rdistance < 500 and Rdistance > 0:
             if Rdistance < 100:
-                Rdistance = F_read_lidar()
+                Rdistance = R_read_lidar()
                 if Rdistance is not None and Rdistance < 500 and Rdistance > 0:
                     break
             break
-    #aaaprint("R done")
-    #aaaprint("return")
+
+    # Ensure all distances are valid before returning
+    if Ldistance is None or Rdistance is None or Fdistance is None:
+        raise ValueError("One or more distance readings are invalid")
+
     return Ldistance, Rdistance, Fdistance
 
 def turnLeftFull():
