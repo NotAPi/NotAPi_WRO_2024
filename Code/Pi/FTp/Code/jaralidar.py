@@ -106,7 +106,7 @@ def F_Loop():
         while (FdistanceTemp1 is None or 0 < FdistanceTemp1 > 500) or (FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500):
             if FdistanceTemp1 is None or 0 < FdistanceTemp1 > 500:
                 FdistanceTemp1 = F_read_lidar()
-            if FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500):
+            if FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500:
                 FdistanceTemp2 = F_read_lidar()
             print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
 
