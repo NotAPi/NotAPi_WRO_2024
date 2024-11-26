@@ -127,7 +127,7 @@ while True:
                 objetivo = int(x_interseccion_der)
                 diferencia_der = bloque_centro_x - x_interseccion_der
 
-                diferencia_der_normalizada = 105 + (diferencia_der / anchura) * (55 - 155)
+                diferencia_der_normalizada = 105 + (diferencia_der / anchura) * (155 - 55)
                 diferencia_der_normalizada = max(55, min(155, diferencia_der_normalizada))
                 cv2.putText(image, f"diferencia_izq: {diferencia_der_normalizada}", (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
                 servo(diferencia_der_normalizada)
