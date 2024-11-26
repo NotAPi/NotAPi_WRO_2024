@@ -50,9 +50,9 @@ while True:
 
     altura, anchura = image.shape[:2]  # Obtener las dimensiones de la imagen
     p1_izquierda = (anchura // 3, 0) 
-    p2_izquierda = (0, altura)
+    p2_izquierda = (0, altura//2)
     p1_derecha = (2 * anchura // 3, 0) 
-    p2_derecha = (anchura, altura) 
+    p2_derecha = (anchura, altura//2) 
 
     hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
     lower_red1 = np.array([120, 100, 100])
