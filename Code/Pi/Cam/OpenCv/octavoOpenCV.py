@@ -127,6 +127,11 @@ while True:
                 objetivo = int(x_interseccion_der)
                 diferencia_der = bloque_centro_x - x_interseccion_der
 
+                diferencia_der_normalizada = 105 + (diferencia_der / anchura) * (55 - 155)
+                diferencia_der_normalizada = max(55, min(155, diferencia_der_normalizada))
+                cv2.putText(image, f"diferencia_izq: {diferencia_der_normalizada}", (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+                servo(diferencia_der_normalizada)
+
             
 
             cv2.arrowedLine(image, (bloque_centro_x, bloque_cercano), (objetivo, bloque_cercano), bloque_color, thickness=5, line_type=cv2.LINE_8, shift=0, tipLength=0.1)
