@@ -260,10 +260,11 @@ try:
     lastTurn = 0
     servo()
     time.sleep(0.05)
-    forward()
-    giros = 0
     while BUTTON_PIN != 0:
         print("Waiting for button")
+        
+    forward()
+    giros = 0
     while True:
         Ldistance, Rdistance, Fdistance = distances()
         Ldistance = int(Ldistance)
