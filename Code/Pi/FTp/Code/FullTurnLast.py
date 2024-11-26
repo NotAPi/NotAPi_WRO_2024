@@ -267,6 +267,7 @@ try:
     # Wait until the button is pressed (connected to GND)
     while pi.read(BUTTON_PIN) != 0:
         print("Waiting for button")
+        print(pi.read(BUTTON_PIN))
         time.sleep(0.1)
         time.sleep(0.1)
     forward()
