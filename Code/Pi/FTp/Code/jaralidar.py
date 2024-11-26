@@ -2,20 +2,33 @@ import time
 import pigpio
 import atexit
 
-def close_gpio():
-    pi.bb_serial_read_close(R_RX_PIN)
-    pi.bb_serial_read_close(L_RX_PIN)
-    pi.bb_serial_read_close(F_RX_PIN)
-    pi.stop()
-
-atexit.register(close_gpio)
 # Initialize pigpio
 pi = pigpio.pi()
+
+def close_gpio():
+    if pi is not None:
+        try:
+            pi.bb_serial_read_close(R_RX_PIN)
+            pi.bb_serial_read_close(L_RX_PIN)
+            pi.bb_serial_read_close(F_RX_PIN)
+        except pigpio.error as e:
+            print(f"Error closing GPIO: {e}")
+        pi.stop()
+
+atexit.register(close_gpio)
 
 # Define pins
 L_RX_PIN = 22
 R_RX_PIN = 24
 F_RX_PIN = 25
+
+# Ensure GPIO pins are not in use before opening them
+try:
+    pi.bb_serial_read_close(L_RX_PIN)
+    pi.bb_serial_read_close(R_RX_PIN)
+    pi.bb_serial_read_close(F_RX_PIN)
+except pigpio.error:
+    pass
 
 # Set up the software serial connection
 pi.set_mode(L_RX_PIN, pigpio.INPUT)
@@ -93,7 +106,7 @@ def F_Loop():
         while (FdistanceTemp1 is None or 0 < FdistanceTemp1 > 500) or (FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500):
             if FdistanceTemp1 is None or 0 < FdistanceTemp1 > 500:
                 FdistanceTemp1 = F_read_lidar()
-            if FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500:
+            if FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500):
                 FdistanceTemp2 = F_read_lidar()
             print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
 
@@ -109,7 +122,4 @@ if __name__ == "__main__":
     try:
         distance_loop()
     except KeyboardInterrupt:
-        pi.bb_serial_read_close(R_RX_PIN)
-        pi.bb_serial_read_close(L_RX_PIN)
-        pi.bb_serial_read_close(F_RX_PIN)
-        pi.stop()
+        close_gpio()
