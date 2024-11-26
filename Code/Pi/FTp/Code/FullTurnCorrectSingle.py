@@ -140,55 +140,52 @@ def distance_loop():
         time.sleep(0.2)
 
 def F_Loop():
-    # global Fdistance
     while True:
         FdistanceTemp1 = F_read_lidar()
         FdistanceTemp2 = F_read_lidar()
-        
-        if FdistanceTemp1 is not None and FdistanceTemp1 < 500 and FdistanceTemp2 is not None and FdistanceTemp2 < 500:
-            # Check if the two readings are within 25% of each other
-            if FdistanceTemp1 < 100 and FdistanceTemp2 < 100:
-                return min(FdistanceTemp1, FdistanceTemp2)
-            else:
-                return min(FdistanceTemp1, FdistanceTemp2)
-        else:
+
+        # Retry mechanism for invalid readings
+        while (FdistanceTemp1 is None or FdistanceTemp1 > 500) or (FdistanceTemp2 is None or FdistanceTemp2 > 500):
+            if FdistanceTemp1 is None or FdistanceTemp1 > 500:
+                FdistanceTemp1 = F_read_lidar()
+            if FdistanceTemp2 is None or FdistanceTemp2 > 500:
+                FdistanceTemp2 = F_read_lidar()
             print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
-        
-        time.sleep(0.1)
+
+        # Return the minimum of the two valid readings
+        return min(FdistanceTemp1, FdistanceTemp2)
 
 def L_Loop():
-    # global Ldistance
     while True:
         LdistanceTemp1 = L_read_lidar()
         LdistanceTemp2 = L_read_lidar()
-        
-        if LdistanceTemp1 is not None and LdistanceTemp1 < 500 and LdistanceTemp2 is not None and LdistanceTemp2 < 500:
-            # Check if the two readings are within 25% of each other
-            if LdistanceTemp1 < 100 and LdistanceTemp2 < 100:
-                return min(LdistanceTemp1, LdistanceTemp2)
-            else:
-                return min(LdistanceTemp1, LdistanceTemp2)
-        else:
+
+        # Retry mechanism for invalid readings
+        while (LdistanceTemp1 is None or LdistanceTemp1 > 500) or (LdistanceTemp2 is None or LdistanceTemp2 > 500):
+            if LdistanceTemp1 is None or LdistanceTemp1 > 500:
+                LdistanceTemp1 = L_read_lidar()
+            if LdistanceTemp2 is None or LdistanceTemp2 > 500:
+                LdistanceTemp2 = L_read_lidar()
             print(f"L Invalid readings: {LdistanceTemp1}, {LdistanceTemp2}")
-        
-        time.sleep(0.1)
+
+        # Return the minimum of the two valid readings
+        return min(LdistanceTemp1, LdistanceTemp2)
 
 def R_Loop():
-    # global Rdistance
     while True:
         RdistanceTemp1 = R_read_lidar()
         RdistanceTemp2 = R_read_lidar()
-        
-        if RdistanceTemp1 is not None and RdistanceTemp1 < 500 and RdistanceTemp2 is not None and RdistanceTemp2 < 500:
-            # Check if the two readings are within 25% of each other
-            if RdistanceTemp1 < 100 and RdistanceTemp2 < 100:
-                return min(RdistanceTemp1, RdistanceTemp2)
-            else:
-                return min(RdistanceTemp1, RdistanceTemp2)
-        else:
+
+        # Retry mechanism for invalid readings
+        while (RdistanceTemp1 is None or RdistanceTemp1 > 500) or (RdistanceTemp2 is None or RdistanceTemp2 > 500):
+            if RdistanceTemp1 is None or RdistanceTemp1 > 500:
+                RdistanceTemp1 = R_read_lidar()
+            if RdistanceTemp2 is None or RdistanceTemp2 > 500:
+                RdistanceTemp2 = R_read_lidar()
             print(f"R Invalid readings: {RdistanceTemp1}, {RdistanceTemp2}")
-        
-        time.sleep(0.1)
+
+        # Return the minimum of the two valid readings
+        return min(RdistanceTemp1, RdistanceTemp2)
         
 # def R_Loop():
 #     global Rdistance
