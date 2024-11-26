@@ -161,14 +161,10 @@ def distances():
     # Get Right distance    
     Rdistance = R_read_lidar()
     # #aaaprint("R:")
-    if Rdistance is None:
-        try: 
-            Rdistance = RdistanceOld
-        except: #si danone
-            while True:
-                Rdistance = R_read_lidar()
-                if Rdistance is not None:
-                    break                
+    while Rdistance is None or Rdistance > 500 or Rdistance <= 0:
+        Rdistance = R_read_lidar()
+        if Rdistance is not None and Rdistance < 500 and Rdistance > 0:
+            break            
     else:
         RdistanceOld = Rdistance
     #aaaprint("R done")
