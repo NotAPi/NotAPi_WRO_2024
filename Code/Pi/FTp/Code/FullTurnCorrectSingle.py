@@ -3,6 +3,7 @@ import pigpio
 import os
 import sys
 import threading
+import concurrent.futures
 
 try:
     os.system("sudo pigpiod")  # Launching GPIO library
@@ -53,6 +54,11 @@ pi.set_mode(F_RX_PIN, pigpio.INPUT)
 pi.bb_serial_read_open(F_RX_PIN, 115200)
 #aaaprint("init done")
 
+def call_in_background(func, *args):
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future = executor.submit(func, *args)
+        return future.result()
+    
 def parse_lidar_data(data):
     if len(data) >= 9 and data[0] == 0x59 and data[1] == 0x59:
         distance = data[2] + data[3] * 256
@@ -135,8 +141,11 @@ def forwardm(distance=1):
 def distance_loop():
     global Ldistance, Rdistance, Fdistance
     while True:
-        Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
-        print("L " + str(Ldistance) + " R " + str(Rdistance) + " F " + str(Fdistance))
+        with lock:
+            Ldistance = call_in_background(L_Loop)
+            Rdistance = call_in_background(R_Loop)
+            Fdistance = call_in_background(F_Loop)
+            print("L " + str(Ldistance) + " R " + str(Rdistance) + " F " + str(Fdistance))
         time.sleep(0.2)
 
 def F_Loop():
@@ -310,6 +319,7 @@ def turnRightFull():
     #aaaprint("Stop")
     time.sleep(0.05)    
     stop()
+    map()
 
 def main():
     global Ldistance, Rdistance, Fdistance
@@ -319,75 +329,68 @@ def main():
         forward()
         giros = 0
         while True:
-            Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
+            Ldistance = call_in_background(L_Loop)
+            Rdistance = call_in_background(R_Loop)
+            Fdistance = call_in_background(F_Loop)
             while Ldistance < 100 or Rdistance < 100:
                 forward()
-                Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
-                print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
+                Ldistance = call_in_background(L_Loop)
+                Rdistance = call_in_background(R_Loop)
+                print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str("noneneneenene"))
                 time.sleep(0.2)
                 if Ldistance + Rdistance > 110:
                     break
-            #aaaprint("Turn time")
-            
             if Ldistance > Rdistance:
                 turnLeftFull()
-                giros = giros + 1
-                #aaaprint("Left")
-            
+                giros += 1
             if Rdistance > Ldistance:
                 turnRightFull()
-                giros = giros + 1
-                #aaaprint("Right")
+                giros += 1
             forward()
-            Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
-
-
             while int(Fdistance) > 165:
                 forward()
-                Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
+                Ldistance = call_in_background(L_Loop)
+                Rdistance = call_in_background(R_Loop)
+                Fdistance = call_in_background(F_Loop)
                 print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
                 time.sleep(0.2)
-                #aaaprint ("F " + str(Fdistance))
                 if int(Fdistance) < 165:
                     break
-            
             if giros == 12:
                 break
-            #aaaprint("150")
-            
-            #aaaprint("Correct time")
-            Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
-            #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
             stop()
-            
+            Ldistance = call_in_background(L_Loop)
+            Rdistance = call_in_background(R_Loop)
+            Fdistance = call_in_background(F_Loop)
+            stop()
             if Ldistance > Rdistance * 0.9:
-                servo(95)  # Turn left
-                #aaaprint("90")
+                servo(95)
             elif Rdistance > Ldistance * 0.9:
-                servo(115)  # Turn right
-                #aaaprint("120")
+                servo(115)
             else:
-                servo(105)  # Go straight
-                #aaaprint("105")
+                servo(105)
             forwardm(0.1)
             servo()
-        
             for a in range(5):
                 print(giros)
-            
-        stop()            
-
+        stop()
     except KeyboardInterrupt:
         stop()
-        pi.bb_serial_read_close(R_RX_PIN)  # Close the serial connection on exit
-        pi.bb_serial_read_close(L_RX_PIN)  # Close the serial connection on exit
-        pi.bb_serial_read_close(F_RX_PIN)  # Close the serial connection on exit
-
+        pi.bb_serial_read_close(R_RX_PIN)
+        pi.bb_serial_read_close(L_RX_PIN)
+        pi.bb_serial_read_close(F_RX_PIN)
         pi.stop()
         
 if __name__ == "__main__":
     try:
-        main()
+        distance_thread = threading.Thread(target=distance_loop)
+        main_thread = threading.Thread(target=main)
+
+        distance_thread.start()
+        main_thread.start()
+
+        distance_thread.join()
+        main_thread.join()
     except KeyboardInterrupt:
         stop()
         pi.bb_serial_read_close(R_RX_PIN)  # Close the serial connection on exit
