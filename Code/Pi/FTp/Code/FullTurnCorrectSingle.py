@@ -3,7 +3,6 @@ import pigpio
 import os
 import sys
 import threading
-import concurrent.futures
 
 try:
     os.system("sudo pigpiod")  # Launching GPIO library
@@ -54,11 +53,6 @@ pi.set_mode(F_RX_PIN, pigpio.INPUT)
 pi.bb_serial_read_open(F_RX_PIN, 115200)
 #aaaprint("init done")
 
-def call_in_background(func, *args):
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future = executor.submit(func, *args)
-        return future.result()
-    
 def parse_lidar_data(data):
     if len(data) >= 9 and data[0] == 0x59 and data[1] == 0x59:
         distance = data[2] + data[3] * 256
@@ -141,11 +135,8 @@ def forwardm(distance=1):
 def distance_loop():
     global Ldistance, Rdistance, Fdistance
     while True:
-        with lock:
-            Ldistance = call_in_background(L_Loop)
-            Rdistance = call_in_background(R_Loop)
-            Fdistance = call_in_background(F_Loop)
-            print("L " + str(Ldistance) + " R " + str(Rdistance) + " F " + str(Fdistance))
+        Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
+        print("L " + str(Ldistance) + " R " + str(Rdistance) + " F " + str(Fdistance))
         time.sleep(0.2)
 
 def F_Loop():
@@ -154,12 +145,12 @@ def F_Loop():
         FdistanceTemp2 = F_read_lidar()
 
         # Retry mechanism for invalid readings
-        while (FdistanceTemp1 is None or 0 < FdistanceTemp1 > 500) or (FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500):
-            if FdistanceTemp1 is None or 0 < FdistanceTemp1 > 500:
+        while (FdistanceTemp1 is None or FdistanceTemp1 > 500) or (FdistanceTemp2 is None or FdistanceTemp2 > 500):
+            if FdistanceTemp1 is None or FdistanceTemp1 > 500:
                 FdistanceTemp1 = F_read_lidar()
-            if FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500:
+            if FdistanceTemp2 is None or FdistanceTemp2 > 500:
                 FdistanceTemp2 = F_read_lidar()
-            # print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
+            print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
 
         # Return the minimum of the two valid readings
         return min(FdistanceTemp1, FdistanceTemp2)
@@ -170,12 +161,12 @@ def L_Loop():
         LdistanceTemp2 = L_read_lidar()
 
         # Retry mechanism for invalid readings
-        while (LdistanceTemp1 is None or 0 < LdistanceTemp1 > 500) or (LdistanceTemp2 is None or 0 < LdistanceTemp2 > 500):
-            if LdistanceTemp1 is None or 0 < LdistanceTemp1 > 500:
+        while (LdistanceTemp1 is None or LdistanceTemp1 > 500) or (LdistanceTemp2 is None or LdistanceTemp2 > 500):
+            if LdistanceTemp1 is None or LdistanceTemp1 > 500:
                 LdistanceTemp1 = L_read_lidar()
-            if LdistanceTemp2 is None or 0 < LdistanceTemp2 > 500:
+            if LdistanceTemp2 is None or LdistanceTemp2 > 500:
                 LdistanceTemp2 = L_read_lidar()
-            # print(f"L Invalid readings: {LdistanceTemp1}, {LdistanceTemp2}")
+            print(f"L Invalid readings: {LdistanceTemp1}, {LdistanceTemp2}")
 
         # Return the minimum of the two valid readings
         return min(LdistanceTemp1, LdistanceTemp2)
@@ -186,12 +177,12 @@ def R_Loop():
         RdistanceTemp2 = R_read_lidar()
 
         # Retry mechanism for invalid readings
-        while (RdistanceTemp1 is None or 0 < RdistanceTemp1 > 500) or (RdistanceTemp2 is None or 0 < RdistanceTemp2 > 500):
-            if RdistanceTemp1 is None or 0 < RdistanceTemp1 > 500:
+        while (RdistanceTemp1 is None or RdistanceTemp1 > 500) or (RdistanceTemp2 is None or RdistanceTemp2 > 500):
+            if RdistanceTemp1 is None or RdistanceTemp1 > 500:
                 RdistanceTemp1 = R_read_lidar()
-            if RdistanceTemp2 is None or 0 < RdistanceTemp2 > 500:
+            if RdistanceTemp2 is None or RdistanceTemp2 > 500:
                 RdistanceTemp2 = R_read_lidar()
-            # print(f"R Invalid readings: {RdistanceTemp1}, {RdistanceTemp2}")
+            print(f"R Invalid readings: {RdistanceTemp1}, {RdistanceTemp2}")
 
         # Return the minimum of the two valid readings
         return min(RdistanceTemp1, RdistanceTemp2)
@@ -319,6 +310,7 @@ def turnRightFull():
     #aaaprint("Stop")
     time.sleep(0.05)    
     stop()
+    map()
 
 def main():
     global Ldistance, Rdistance, Fdistance
@@ -328,68 +320,75 @@ def main():
         forward()
         giros = 0
         while True:
-            Ldistance = call_in_background(L_Loop)
-            Rdistance = call_in_background(R_Loop)
-            Fdistance = call_in_background(F_Loop)
+            Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
             while Ldistance < 100 or Rdistance < 100:
                 forward()
-                Ldistance = call_in_background(L_Loop)
-                Rdistance = call_in_background(R_Loop)
+                Ldistance, Rdistance= L_Loop(), R_Loop()
                 print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str("noneneneenene"))
                 time.sleep(0.2)
                 if Ldistance + Rdistance > 110:
                     break
+            #aaaprint("Turn time")
+            
             if Ldistance > Rdistance:
                 turnLeftFull()
-                giros += 1
+                giros = giros + 1
+                #aaaprint("Left")
+            
             if Rdistance > Ldistance:
                 turnRightFull()
-                giros += 1
+                giros = giros + 1
+                #aaaprint("Right")
             forward()
+            Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
+
+
             while int(Fdistance) > 165:
                 forward()
-                Ldistance = call_in_background(L_Loop)
-                Rdistance = call_in_background(R_Loop)
-                Fdistance = call_in_background(F_Loop)
+                Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
                 print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
                 time.sleep(0.2)
+                #aaaprint ("F " + str(Fdistance))
                 if int(Fdistance) < 165:
                     break
+            
             if giros == 12:
                 break
+            #aaaprint("150")
+            
+            #aaaprint("Correct time")
+            Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
+            #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
             stop()
-            Ldistance = call_in_background(L_Loop)
-            Rdistance = call_in_background(R_Loop)
-            Fdistance = call_in_background(F_Loop)
-            stop()
+            
             if Ldistance > Rdistance * 0.9:
-                servo(95)
+                servo(95)  # Turn left
+                #aaaprint("90")
             elif Rdistance > Ldistance * 0.9:
-                servo(115)
+                servo(115)  # Turn right
+                #aaaprint("120")
             else:
-                servo(105)
+                servo(105)  # Go straight
+                #aaaprint("105")
             forwardm(0.1)
             servo()
+        
             for a in range(5):
                 print(giros)
-        stop()
+            
+        stop()            
+
     except KeyboardInterrupt:
         stop()
-        pi.bb_serial_read_close(R_RX_PIN)
-        pi.bb_serial_read_close(L_RX_PIN)
-        pi.bb_serial_read_close(F_RX_PIN)
+        pi.bb_serial_read_close(R_RX_PIN)  # Close the serial connection on exit
+        pi.bb_serial_read_close(L_RX_PIN)  # Close the serial connection on exit
+        pi.bb_serial_read_close(F_RX_PIN)  # Close the serial connection on exit
+
         pi.stop()
         
 if __name__ == "__main__":
     try:
-        distance_thread = threading.Thread(target=distance_loop)
-        main_thread = threading.Thread(target=main)
-
-        distance_thread.start()
-        main_thread.start()
-
-        distance_thread.join()
-        main_thread.join()
+        main()
     except KeyboardInterrupt:
         stop()
         pi.bb_serial_read_close(R_RX_PIN)  # Close the serial connection on exit
