@@ -17,6 +17,7 @@ pi.bb_serial_read_open(R_RX_PIN, 115200)
 pi.set_mode(F_RX_PIN, pigpio.INPUT)
 pi.bb_serial_read_open(F_RX_PIN, 115200)
 
+# Function to parse lidar data
 def parse_lidar_data(data):
     if len(data) >= 9 and data[0] == 0x59 and data[1] == 0x59:
         distance = data[2] + data[3] * 256
