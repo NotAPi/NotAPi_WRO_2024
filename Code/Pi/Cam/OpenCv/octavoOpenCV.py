@@ -108,12 +108,13 @@ while True:
                     bloque_color = verde
 
         if bloque_cercano != -1:
-            cv2.line(image, (bloque_centro_x, 0), (bloque_centro_x, image.shape[0]), (255, 0, 255), 2)
+            cv2.line(image, (bloque_centro_x, 0), (bloque_centro_x, image.shape[0]), (255, 0, 255), 2) 
 
             if bloque_color == rojo:
                 # Intersección con la línea izquierda
                 x_interseccion_izq = p1_izquierda[0] + ((bloque_cercano - p1_izquierda[1]) / (p2_izquierda[1] - p1_izquierda[1])) * (p2_izquierda[0] - p1_izquierda[0]) #calculla 
                 objetivo = int(x_interseccion_izq)
+
             else:
                 # Intersección con la línea derecha
                 x_interseccion_der = p1_derecha[0] + ((bloque_cercano - p1_derecha[1]) / (p2_derecha[1] - p1_derecha[1])) * (p2_derecha[0] - p1_derecha[0])
@@ -126,7 +127,7 @@ while True:
             cv2.putText(image, f"Arrow length: {arrow_length}", (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
             angulo_objetivo = 55 + (arrow_length / anchura) * (155 - 55)
             cv2.putText(image, f"servo: {angulo_objetivo}", (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
-            servo(angulo_objetivo)
+            servo(int(angulo_objetivo))
 
 
 
