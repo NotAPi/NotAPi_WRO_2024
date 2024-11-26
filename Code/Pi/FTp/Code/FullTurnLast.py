@@ -268,7 +268,7 @@ try:
             checkTime(lastTurn)
             forward()
             Ldistance, Rdistance, Fdistance = distances()
-            print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
+            print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(int(Ldistance) + int(Rdistance)) + " F " + str(Fdistance))
             time.sleep(0.2)
             if Ldistance + Rdistance > 110:
                 break
