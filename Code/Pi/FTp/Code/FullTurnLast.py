@@ -181,7 +181,7 @@ def distances():
             break
     #aaaprint("R done")
     #aaaprint("return")
-    return int(Ldistance), int(Rdistance), int(Fdistance)
+    return Ldistance, Rdistance, Fdistance
 
 def turnLeftFull():
     servo()
@@ -265,12 +265,18 @@ try:
     while BUTTON_PIN != 0:
         print("Waiting for button")
     while True:
-        int(Ldistance), int(Rdistance), int(Fdistance) = distances()
+        Ldistance, Rdistance, Fdistance = distances()
+        Ldistance = int(Ldistance)
+        Rdistance = int(Rdistance)
+        Fdistance = int(Fdistance)
         lastTurn = time.time()
         while Ldistance < 100 or Rdistance < 100:
             checkTime(lastTurn)
             forward()
             Ldistance, Rdistance, Fdistance = distances()
+            Ldistance = int(Ldistance)
+            Rdistance = int(Rdistance)
+            Fdistance = int(Fdistance)
             print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(int(Ldistance) + int(Rdistance)) + " F " + str(Fdistance))
             time.sleep(0.2)
             if Ldistance + Rdistance > 110:
@@ -292,12 +298,17 @@ try:
         forward()
         lastTurn = time.time() 
         Ldistance, Rdistance, Fdistance = distances()
-        
+        Ldistance = int(Ldistance)
+        Rdistance = int(Rdistance)
+        Fdistance = int(Fdistance)
 
         while int(Fdistance) > 165:
             checkTime(lastTurn)
             forward()
             Ldistance, Rdistance, Fdistance = distances()
+            Ldistance = int(Ldistance)
+            Rdistance = int(Rdistance)
+            Fdistance = int(Fdistance)
             print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
             time.sleep(0.2)
             #aaaprint ("F " + str(Fdistance))
@@ -310,6 +321,9 @@ try:
         
         #aaaprint("Correct time")
         Ldistance, Rdistance, Fdistance = distances()
+        Ldistance = int(Ldistance)
+        Rdistance = int(Rdistance)
+        Fdistance = int(Fdistance)
         #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
         stop()
         if abs(Ldistance - Rdistance) > 8:
