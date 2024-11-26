@@ -295,6 +295,7 @@ try:
         for a in range(5):
             print(giros)
         
+    forwardm(0.5)
     stop()
 
         
