@@ -140,7 +140,7 @@ def distance_loop():
         time.sleep(0.2)
 
 def F_Loop():
-    global Fdistance
+    # global Fdistance
     while True:
         FdistanceTemp1 = F_read_lidar()
         FdistanceTemp2 = F_read_lidar()
@@ -157,7 +157,7 @@ def F_Loop():
         time.sleep(0.1)
 
 def L_Loop():
-    global Ldistance
+    # global Ldistance
     while True:
         LdistanceTemp1 = L_read_lidar()
         LdistanceTemp2 = L_read_lidar()
@@ -174,7 +174,7 @@ def L_Loop():
         time.sleep(0.1)
 
 def R_Loop():
-    global Rdistance
+    # global Rdistance
     while True:
         RdistanceTemp1 = R_read_lidar()
         RdistanceTemp2 = R_read_lidar()
@@ -322,7 +322,7 @@ def main():
         forward()
         giros = 0
         while True:
-            Ldistance, Rdistance, Fdistance = distances()
+            Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
             while Ldistance < 100 or Rdistance < 100:
                 forward()
                 # Ldistance, Rdistance, Fdistance = distances()
@@ -346,7 +346,7 @@ def main():
 
             while int(Fdistance) > 165:
                 forward()
-                # Ldistance, Rdistance, Fdistance = distances()
+                Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
                 print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
                 time.sleep(0.2)
                 #aaaprint ("F " + str(Fdistance))
@@ -389,15 +389,7 @@ def main():
         
 if __name__ == "__main__":
     try:
-            
-        distance_thread = threading.Thread(target=distance_loop)
-        main_thread = threading.Thread(target=main)
-        
-        distance_thread.start()
-        main_thread.start()
-        
-        distance_thread.join()
-        main_thread.join()
+        main()
     except KeyboardInterrupt:
         stop()
         pi.bb_serial_read_close(R_RX_PIN)  # Close the serial connection on exit
