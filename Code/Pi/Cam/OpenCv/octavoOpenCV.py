@@ -118,7 +118,7 @@ while True:
 
                 diferencia_izq_normalizada = 105 + (diferencia_izq / anchura) * (155 - 55)
                 cv2.putText(image, f"diferencia_izq: {diferencia_izq_normalizada}", (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
-
+                servo(diferencia_izq_normalizada)
 
             else:
                 # Intersección con la línea derecha
