@@ -22,6 +22,7 @@ IN2_PIN = 11
 ENA_PIN = 12
 
 SERVO_PIN = 17 #servo pin
+angulo_objetivo = 105 #lo pone en el centro 
 
 # Initialize pigpio
 pi = pigpio.pi()
@@ -34,13 +35,18 @@ def forward(speed=255):
     pi.write(IN2_PIN, 1)
     pi.set_PWM_dutycycle(ENA_PIN, speed)
 
+def servo(angle):
+    pulse_width = 500 + (angle / 180.0) * 2000
+    pi.set_servo_pulsewidth(SERVO_PIN, pulse_width)
+
 while True:
     image_bgr = picam2.capture_array()
 
     # Swap the red and blue channels
     image = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
 
-    cv2.waitKey(1) 
+    cv2.waitKey(1)
+
 
     altura, anchura = image.shape[:2]  # Obtener las dimensiones de la imagen
     p1_izquierda = (anchura // 3, 0) 
@@ -118,10 +124,14 @@ while True:
             cv2.arrowedLine(image, (bloque_centro_x, bloque_cercano), (objetivo, bloque_cercano), bloque_color, thickness=5, line_type=cv2.LINE_8, shift=0, tipLength=0.1)
             arrow_length = abs(bloque_centro_x - objetivo)
             cv2.putText(image, f"Arrow length: {arrow_length}", (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 2)
+            angulo_objetivo = 55 + (arrow_length / anchura) * (155 - 55)
+
+
 
 
     draw_centroids_and_contours(red_mask, image, (0, 0, 255), green_mask, (0, 255, 0))
     #forward() #Ve hacia adelante
+    servo(angulo_objetivo)
 
     
     cv2.line(image, p1_izquierda, p2_izquierda, (0, 255, 255), 2)
