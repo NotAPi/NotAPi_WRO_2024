@@ -63,7 +63,7 @@ listener.start()
 
 # Initialize the camera
 picam2 = Picamera2()
-picam2.configure(picam2.create_preview_configuration(main={"size": (640, 480)}))
+picam2.configure(picam2.create_preview_configuration(main={"size": (320, 240)}))  # Lower resolution
 picam2.start()
 
 try:
@@ -79,7 +79,7 @@ try:
             break
 
         # Keep the script running to listen for key presses
-        time.sleep(0.1)
+        time.sleep(0.01)  # Reduce sleep time to make the loop faster
 except KeyboardInterrupt:
     stop()
     pi.stop()
