@@ -1,16 +1,13 @@
 import time
 import pigpio
 import os
-import sys
+import threading
 
 try:
     os.system("sudo pigpiod")  # Launching GPIO library
     time.sleep(1)  # As it takes some time to launch
 except:
-    #aaaprint("GPIO library already launched")
     pass
-
-# 55------105---155
 
 # Initialize pigpio
 pi = pigpio.pi()
@@ -25,8 +22,12 @@ ENA_PIN = 12
 
 SERVO_PIN = 17
 
+Ldistance = 0
+Rdistance = 0
+Fdistance = 0
 
-Laps = 0
+lock = threading.Lock()
+
 # Try to close the serial connection if it is already open
 try:
     pi.bb_serial_read_close(R_RX_PIN)
@@ -35,8 +36,6 @@ try:
 except:
     pass
 
-
-
 # Set up the software serial connection
 pi.set_mode(R_RX_PIN, pigpio.INPUT)
 pi.bb_serial_read_open(R_RX_PIN, 115200)
@@ -44,7 +43,6 @@ pi.set_mode(L_RX_PIN, pigpio.INPUT)
 pi.bb_serial_read_open(L_RX_PIN, 115200)
 pi.set_mode(F_RX_PIN, pigpio.INPUT)
 pi.bb_serial_read_open(F_RX_PIN, 115200)
-#aaaprint("init done")
 
 def parse_lidar_data(data):
     if len(data) >= 9 and data[0] == 0x59 and data[1] == 0x59:
@@ -60,8 +58,7 @@ def F_read_lidar():
             break
     if count > 0:
         distance, strength = parse_lidar_data(data)
-        if distance is not None: # Isn't really needed
-            # #aaaprint(f"DistanceR: {distance} cm, Strength: {strength}")
+        if distance is not None:
             return distance
 
 def R_read_lidar():
@@ -71,8 +68,7 @@ def R_read_lidar():
             break
     if count > 0:
         distance, strength = parse_lidar_data(data)
-        if distance is not None: # Isn't really needed
-            # #aaaprint(f"DistanceR: {distance} cm, Strength: {strength}")
+        if distance is not None:
             return distance
 
 def L_read_lidar():
@@ -82,45 +78,8 @@ def L_read_lidar():
             break
     if count > 0:
         distance, strength = parse_lidar_data(data)
-        if distance is not None: # Isn't really needed
-            # #aaaprint(f"DistanceL: {distance} cm, Strength: {strength}")
+        if distance is not None:
             return distance
-        
-def F_Read():
-    global Fdistance
-    while True:
-        FdistanceTemp1 = F_read_lidar()
-        if FdistanceTemp1 is not None and FdistanceTemp1 < 500:
-            Fdistance = FdistanceTemp1
-            # print(f"Fdistance updated: {Fdistance}")
-            return Fdistance
-        else:
-            print(f"F Invalid readings: {FdistanceTemp1}")
-        time.sleep(0.1)
-        
-def L_Read():
-    global Ldistance
-    while True:
-        LdistanceTemp1 = L_read_lidar()
-        if LdistanceTemp1 is not None and LdistanceTemp1 < 500:
-            Ldistance = LdistanceTemp1
-            # print(f"Ldistance updated: {Ldistance}")
-            return Ldistance
-        else:
-            print(f"L Invalid readings: {LdistanceTemp1}")
-        time.sleep(0.1)
-
-def R_Read():
-    global Rdistance
-    while True:
-        RdistanceTemp1 = R_read_lidar()
-        if RdistanceTemp1 is not None and RdistanceTemp1 < 500:
-            Rdistance = RdistanceTemp1
-            # print(f"Rdistance updated: {Rdistance}")
-            return Rdistance
-        else:
-            print(f"R Invalid readings: {RdistanceTemp1}")
-        time.sleep(0.1)
 
 def forward(speed=255):
     pi.write(IN1_PIN, 0)
@@ -159,150 +118,144 @@ def turnLeft(angle=90):
 
 def forwardm(distance=1):
     forward(255)
-    time.sleep(6.6*distance)
+    time.sleep(6.6 * distance)
 
 def distances():
-    
-    # Get Front distance    
-    #aaaprint("F")
-    Fdistance = F_Read()
-    # #aaaprint("F:")
-    #aaaprint("L")
-    
-    # Get Left distance    
-    Ldistance = L_Read()
-    # #aaapr
-    Rdistance = R_Read()
-    
-    #aaaprint("return")
+    global Ldistance, Rdistance, Fdistance
+    FdistanceTemp = F_read_lidar()
+    if FdistanceTemp is not None:
+        Fdistance = FdistanceTemp
+
+    LdistanceTemp = L_read_lidar()
+    if LdistanceTemp is not None:
+        Ldistance = LdistanceTemp
+
+    RdistanceTemp = R_read_lidar()
+    if RdistanceTemp is not None:
+        Rdistance = RdistanceTemp
+
     return Ldistance, Rdistance, Fdistance
+
+def distance_loop():
+    global Ldistance, Rdistance, Fdistance
+    while True:
+        with lock:
+            Ldistance, Rdistance, Fdistance = distances()
+            print("L " + str(Ldistance) + " R " + str(Rdistance) + " F " + str(Fdistance))
+        time.sleep(0.2)
 
 def turnLeftFull():
     servo(105)
     forwardm(0.2)
     turnLeft(90)
-    
-    servo()
-    # forwardm(0.5)
 
+    servo()
     stop()
     time.sleep(0.05)
-    #aaaprint("read")
     forward()
     time.sleep(0.1)
     Ldistance, Rdistance, Fdistance = distances()
-    #aaaprint("read done")
     stop()
-    #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
 
     while Ldistance + Rdistance > 150:
         forward()
         Ldistance, Rdistance, Fdistance = distances()
-        #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
-        # forward()        
         time.sleep(0.2)
-    #aaaprint("Stop")
-    time.sleep(0.05)    
+    time.sleep(0.05)
     stop()
-    
+
 def turnRightFull():
     servo(105)
     forwardm(0.2)
     turnRight(90)
-    
-    servo()
-    # forwardm(0.5)
 
+    servo()
     stop()
     time.sleep(0.05)
-    #aaaprint("read")
     forward()
     time.sleep(0.1)
     Ldistance, Rdistance, Fdistance = distances()
-    #aaaprint("read done")
     stop()
-    #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
 
     while Ldistance + Rdistance > 150:
         forward()
         Ldistance, Rdistance, Fdistance = distances()
-        #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
-        # forward()        
         time.sleep(0.2)
-    #aaaprint("Stop")
-    time.sleep(0.05)    
-    stop()
-    
-try:
-    servo()
     time.sleep(0.05)
-    forward()
-    giros = 0
-    while True:
-        Ldistance, Rdistance, Fdistance = distances()
-        while Ldistance < 100 or Rdistance < 100:
-            forward()
-            Ldistance, Rdistance, Fdistance = distances()
-            print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
-            time.sleep(0.2)
-            if Ldistance + Rdistance > 110:
-                break
-        #aaaprint("Turn time")
-        
-        if Ldistance > Rdistance:
-            turnLeftFull()
-            giros = giros + 1
-            #aaaprint("Left")
-        
-        if Rdistance > Ldistance:
-            turnRightFull()
-            giros = giros + 1
-            #aaaprint("Right")
-        forward()
-        Ldistance, Rdistance, Fdistance = distances()
+    stop()
 
-        while int(Fdistance) > 165:
-            forward()
-            Ldistance, Rdistance, Fdistance = distances()
-            print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
-            time.sleep(0.2)
-            #aaaprint ("F " + str(Fdistance))
-            if int(Fdistance) < 165:
-                break
-        
-        if giros == 12:
-            break
-        #aaaprint("150")
-        
-        #aaaprint("Correct time")
-        Ldistance, Rdistance, Fdistance = distances()
-        #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
-        stop()
-        
-        if Ldistance > Rdistance * 0.9:
-            servo(95)  # Turn left
-            #aaaprint("90")
-        elif Rdistance > Ldistance * 0.9:
-            servo(115)  # Turn right
-            #aaaprint("120")
-        else:
-            servo(105)  # Go straight
-            #aaaprint("105")
-        forwardm(0.1)
+def main():
+    global Ldistance, Rdistance, Fdistance
+    try:
         servo()
-    
-        for a in range(5):
-            print(giros)
-        
-    stop()
+        time.sleep(0.05)
+        forward()
+        giros = 0
+        while True:
+            while Ldistance < 100 or Rdistance < 100:
+                forward()
+                with lock:
+                    print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
+                time.sleep(0.2)
+                if Ldistance + Rdistance > 110:
+                    break
 
-        
-        
+            if Ldistance > Rdistance:
+                turnLeftFull()
+                giros += 1
 
-except KeyboardInterrupt:
-    stop()
-    pi.bb_serial_read_close(R_RX_PIN)  # Close the serial connection on exit
-    pi.bb_serial_read_close(L_RX_PIN)  # Close the serial connection on exit
-    pi.bb_serial_read_close(F_RX_PIN)  # Close the serial connection on exit
+            if Rdistance > Ldistance:
+                turnRightFull()
+                giros += 1
 
-    pi.stop()
+            forward()
+            while int(Fdistance) > 165:
+                forward()
+                with lock:
+                    print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
+                time.sleep(0.2)
+                if int(Fdistance) < 165:
+                    break
+
+            if giros == 12:
+                break
+
+            stop()
+
+            if Ldistance > Rdistance * 0.9:
+                servo(95)
+            elif Rdistance > Ldistance * 0.9:
+                servo(115)
+            else:
+                servo(105)
+            forwardm(0.1)
+            servo()
+
+            for a in range(5):
+                print(giros)
+
+        stop()
+
+    except KeyboardInterrupt:
+        stop()
+        pi.bb_serial_read_close(R_RX_PIN)
+        pi.bb_serial_read_close(L_RX_PIN)
+        pi.bb_serial_read_close(F_RX_PIN)
+        pi.stop()
+
+if __name__ == "__main__":
+    try:
+        distance_thread = threading.Thread(target=distance_loop)
+        main_thread = threading.Thread(target=main)
+
+        distance_thread.start()
+        main_thread.start()
+
+        distance_thread.join()
+        main_thread.join()
+    except KeyboardInterrupt:
+        stop()
+        pi.bb_serial_read_close(R_RX_PIN)
+        pi.bb_serial_read_close(L_RX_PIN)
+        pi.bb_serial_read_close(F_RX_PIN)
+        pi.stop()
