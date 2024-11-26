@@ -134,7 +134,12 @@ def distances():
     while Fdistance is None or Fdistance > 500 or Fdistance <= 0:
         Fdistance = F_read_lidar()
         if Fdistance is not None and Fdistance < 500 and Fdistance > 0:
+            if Fdistance < 100:
+                Fdistance = F_read_lidar()
+                if Fdistance is not None and Fdistance < 500 and Fdistance > 0:
+                    break
             break
+            
     # if Fdistance is None:
     #     try: 
     #         Fdistance = FdistanceOld
@@ -153,8 +158,12 @@ def distances():
     Ldistance = L_read_lidar()
     # #aaaprint("L:")
     while Ldistance is None or Ldistance > 500 or Ldistance <= 0:
-        Ldistance = L_read_lidar()
+        Ldistance = F_read_lidar()
         if Ldistance is not None and Ldistance < 500 and Ldistance > 0:
+            if Ldistance < 100:
+                Ldistance = F_read_lidar()
+                if Ldistance is not None and Ldistance < 500 and Ldistance > 0:
+                    break
             break
     
     #aaaprint("R")
@@ -162,11 +171,13 @@ def distances():
     Rdistance = R_read_lidar()
     # #aaaprint("R:")
     while Rdistance is None or Rdistance > 500 or Rdistance <= 0:
-        Rdistance = R_read_lidar()
+        Rdistance = F_read_lidar()
         if Rdistance is not None and Rdistance < 500 and Rdistance > 0:
-            break            
-    else:
-        RdistanceOld = Rdistance
+            if Rdistance < 100:
+                Rdistance = F_read_lidar()
+                if Rdistance is not None and Rdistance < 500 and Rdistance > 0:
+                    break
+            break
     #aaaprint("R done")
     #aaaprint("return")
     return Ldistance, Rdistance, Fdistance
