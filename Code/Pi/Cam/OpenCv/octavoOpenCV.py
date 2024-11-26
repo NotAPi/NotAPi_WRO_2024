@@ -114,11 +114,17 @@ while True:
                 # Intersección con la línea izquierda
                 x_interseccion_izq = p1_izquierda[0] + ((bloque_cercano - p1_izquierda[1]) / (p2_izquierda[1] - p1_izquierda[1])) * (p2_izquierda[0] - p1_izquierda[0]) #calculla 
                 objetivo = int(x_interseccion_izq)
+                diferencia_izq = bloque_centro_x - x_interseccion_izq
+
+                diferencia_izq_normalizada = 105 + (diferencia_izq / anchura) * (155 - 55)
+                cv2.putText(image, f"diferencia_izq: {diferencia_izq_normalizada}", (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+
 
             else:
                 # Intersección con la línea derecha
                 x_interseccion_der = p1_derecha[0] + ((bloque_cercano - p1_derecha[1]) / (p2_derecha[1] - p1_derecha[1])) * (p2_derecha[0] - p1_derecha[0])
                 objetivo = int(x_interseccion_der)
+                diferencia_der = bloque_centro_x - x_interseccion_der
 
             
 
@@ -127,7 +133,7 @@ while True:
             cv2.putText(image, f"Arrow length: {arrow_length}", (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
             angulo_objetivo = 55 + (arrow_length / anchura) * (155 - 55)
             cv2.putText(image, f"servo: {angulo_objetivo}", (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
-            servo(int(angulo_objetivo))
+            servo(angulo_objetivo)
 
 
 
