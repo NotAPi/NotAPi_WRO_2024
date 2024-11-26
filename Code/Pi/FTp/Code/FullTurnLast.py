@@ -35,7 +35,9 @@ try:
 except:
     pass
 
-
+# Set up the button pin as input with a pull-up resistor
+    pi.set_mode(BUTTON_PIN, pigpio.INPUT)
+    pi.set_pull_up_down(BUTTON_PIN, pigpio.PUD_UP)
 
 # Set up the software serial connection
 pi.set_mode(R_RX_PIN, pigpio.INPUT) 
@@ -260,8 +262,12 @@ try:
     lastTurn = 0
     servo()
     time.sleep(0.05)
-    while BUTTON_PIN != 0:
+    
+    
+    # Wait until the button is pressed (connected to GND)
+    while pi.read(BUTTON_PIN) != 0:
         print("Waiting for button")
+        time.sleep(0.1)
         time.sleep(0.1)
     forward()
     giros = 0
