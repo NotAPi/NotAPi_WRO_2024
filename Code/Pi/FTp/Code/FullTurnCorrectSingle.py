@@ -154,10 +154,10 @@ def F_Loop():
         FdistanceTemp2 = F_read_lidar()
 
         # Retry mechanism for invalid readings
-        while (FdistanceTemp1 is None or FdistanceTemp1 > 500) or (FdistanceTemp2 is None or FdistanceTemp2 > 500):
-            if FdistanceTemp1 is None or FdistanceTemp1 > 500:
+        while (FdistanceTemp1 is None or 0 < FdistanceTemp1 > 500) or (FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500):
+            if FdistanceTemp1 is None or 0 < FdistanceTemp1 > 500:
                 FdistanceTemp1 = F_read_lidar()
-            if FdistanceTemp2 is None or FdistanceTemp2 > 500:
+            if FdistanceTemp2 is None or 0 < FdistanceTemp2 > 500:
                 FdistanceTemp2 = F_read_lidar()
             # print(f"F Invalid readings: {FdistanceTemp1}, {FdistanceTemp2}")
 
@@ -170,10 +170,10 @@ def L_Loop():
         LdistanceTemp2 = L_read_lidar()
 
         # Retry mechanism for invalid readings
-        while (LdistanceTemp1 is None or LdistanceTemp1 > 500) or (LdistanceTemp2 is None or LdistanceTemp2 > 500):
-            if LdistanceTemp1 is None or LdistanceTemp1 > 500:
+        while (LdistanceTemp1 is None or 0 < LdistanceTemp1 > 500) or (LdistanceTemp2 is None or 0 < LdistanceTemp2 > 500):
+            if LdistanceTemp1 is None or 0 < LdistanceTemp1 > 500:
                 LdistanceTemp1 = L_read_lidar()
-            if LdistanceTemp2 is None or LdistanceTemp2 > 500:
+            if LdistanceTemp2 is None or 0 < LdistanceTemp2 > 500:
                 LdistanceTemp2 = L_read_lidar()
             # print(f"L Invalid readings: {LdistanceTemp1}, {LdistanceTemp2}")
 
@@ -186,10 +186,10 @@ def R_Loop():
         RdistanceTemp2 = R_read_lidar()
 
         # Retry mechanism for invalid readings
-        while (RdistanceTemp1 is None or RdistanceTemp1 > 500) or (RdistanceTemp2 is None or RdistanceTemp2 > 500):
-            if RdistanceTemp1 is None or RdistanceTemp1 > 500:
+        while (RdistanceTemp1 is None or 0 < RdistanceTemp1 > 500) or (RdistanceTemp2 is None or 0 < RdistanceTemp2 > 500):
+            if RdistanceTemp1 is None or 0 < RdistanceTemp1 > 500:
                 RdistanceTemp1 = R_read_lidar()
-            if RdistanceTemp2 is None or RdistanceTemp2 > 500:
+            if RdistanceTemp2 is None or 0 < RdistanceTemp2 > 500:
                 RdistanceTemp2 = R_read_lidar()
             # print(f"R Invalid readings: {RdistanceTemp1}, {RdistanceTemp2}")
 
