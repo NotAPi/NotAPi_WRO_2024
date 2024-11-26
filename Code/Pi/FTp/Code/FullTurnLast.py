@@ -24,6 +24,7 @@ ENA_PIN = 12
 
 SERVO_PIN = 17 #servo pin
 
+BUTTON_PIN = 16 #button pin
 
 Laps = 0
 # Try to close the serial connection if it is already open
@@ -261,6 +262,8 @@ try:
     time.sleep(0.05)
     forward()
     giros = 0
+    while BUTTON_PIN != 0:
+        print("Waiting for button")
     while True:
         int(Ldistance), int(Rdistance), int(Fdistance) = distances()
         lastTurn = time.time()
