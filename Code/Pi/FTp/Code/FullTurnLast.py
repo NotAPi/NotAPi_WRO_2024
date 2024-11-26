@@ -228,7 +228,7 @@ def turnRightFull():
     stop()
 
 def checkTime(lastTurn):
-    if time.time() - lastTurn > 15:
+    if time.time() - lastTurn > 20:
         backward(255)
         time.sleep(1)
         if Left:
