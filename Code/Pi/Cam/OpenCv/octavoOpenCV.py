@@ -118,10 +118,11 @@ while True:
             cv2.arrowedLine(image, (bloque_centro_x, bloque_cercano), (objetivo, bloque_cercano), bloque_color, thickness=5, line_type=cv2.LINE_8, shift=0, tipLength=0.1)
             arrow_length = abs(bloque_centro_x - objetivo)
             print(f"Arrow length: {arrow_length}")
+            cv2.putText(image, f"Arrow length: {arrow_length}", (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 2)
 
 
     draw_centroids_and_contours(red_mask, image, (0, 0, 255), green_mask, (0, 255, 0))
-    #forward()
+    #forward() #Ve hacia adelante
 
     
     cv2.line(image, p1_izquierda, p2_izquierda, (0, 255, 255), 2)
