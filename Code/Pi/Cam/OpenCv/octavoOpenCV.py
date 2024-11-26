@@ -150,8 +150,7 @@ while True:
 
 
     draw_centroids_and_contours(red_mask, image, (0, 0, 255), green_mask, (0, 255, 0))
-    forward() #Ve hacia adelante
-
+    
     
     cv2.line(image, p1_izquierda, p2_izquierda, (0, 255, 255), 2)
     cv2.line(image, p1_derecha, p2_derecha, (0, 255, 255), 2)
@@ -163,6 +162,9 @@ while True:
     if primera_vuelta == True:
         time.sleep(5)
         primera_vuelta = False
+    
+    forward() #Ve hacia adelante
+
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         pi.write(IN1_PIN, 0)
