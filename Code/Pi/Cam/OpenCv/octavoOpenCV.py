@@ -28,7 +28,7 @@ angulo_objetivo = 105 #lo pone en el centro
 pi = pigpio.pi()
 
 # Allow the camera to warm up
-time.sleep(0.1)
+time.sleep(3)
 
 def forward(speed=255):
     pi.write(IN1_PIN, 0)
