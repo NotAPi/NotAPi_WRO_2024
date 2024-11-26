@@ -180,7 +180,7 @@ def distances():
             break
     #aaaprint("R done")
     #aaaprint("return")
-    return Ldistance, Rdistance, Fdistance
+    return int(Ldistance), int(Rdistance), int(Fdistance)
 
 def turnLeftFull():
     servo()
@@ -262,7 +262,7 @@ try:
     forward()
     giros = 0
     while True:
-        Ldistance, Rdistance, Fdistance = distances()
+        int(Ldistance), int(Rdistance), int(Fdistance) = distances()
         lastTurn = time.time()
         while Ldistance < 100 or Rdistance < 100:
             checkTime(lastTurn)
