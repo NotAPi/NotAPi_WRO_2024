@@ -262,7 +262,7 @@ try:
     time.sleep(0.05)
     while BUTTON_PIN != 0:
         print("Waiting for button")
-        
+        time.sleep(0.1)
     forward()
     giros = 0
     while True:
