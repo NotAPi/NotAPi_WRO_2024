@@ -148,7 +148,7 @@ while True:
 
 
     draw_centroids_and_contours(red_mask, image, (0, 0, 255), green_mask, (0, 255, 0))
-    forward() #Ve hacia adelante
+    #forward() #Ve hacia adelante
 
     
     cv2.line(image, p1_izquierda, p2_izquierda, (0, 255, 255), 2)
