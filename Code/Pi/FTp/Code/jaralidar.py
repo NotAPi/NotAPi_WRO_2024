@@ -1,6 +1,14 @@
 import time
 import pigpio
+import atexit
 
+def close_gpio():
+    pi.bb_serial_read_close(R_RX_PIN)
+    pi.bb_serial_read_close(L_RX_PIN)
+    pi.bb_serial_read_close(F_RX_PIN)
+    pi.stop()
+
+atexit.register(close_gpio)
 # Initialize pigpio
 pi = pigpio.pi()
 
