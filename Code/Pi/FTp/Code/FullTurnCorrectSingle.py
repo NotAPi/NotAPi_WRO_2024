@@ -319,7 +319,6 @@ def turnRightFull():
     #aaaprint("Stop")
     time.sleep(0.05)    
     stop()
-    map()
 
 def main():
     global Ldistance, Rdistance, Fdistance
