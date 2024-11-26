@@ -28,7 +28,7 @@ angulo_objetivo = 105 #lo pone en el centro
 pi = pigpio.pi()
 
 # Allow the camera to warm up
-time.sleep(5)
+time.sleep(0.1)
 
 def forward(speed=255):
     pi.write(IN1_PIN, 0)
@@ -38,6 +38,8 @@ def forward(speed=255):
 def servo(angle):
     pulse_width = 500 + (angle / 180.0) * 2000
     pi.set_servo_pulsewidth(SERVO_PIN, pulse_width)
+
+primera_vuelta = True
 
 while True:
     image_bgr = picam2.capture_array()
@@ -158,7 +160,9 @@ while True:
     cv2.imshow('Green Mask', green_mask)
     cv2.imshow('original', image)
 
-    
+    if primera_vuelta == True:
+        time.sleep(5)
+        primera_vuelta = False
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         pi.write(IN1_PIN, 0)
