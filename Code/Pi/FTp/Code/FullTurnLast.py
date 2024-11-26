@@ -256,8 +256,11 @@ try:
             turnRightFull()
             giros = giros + 1
             #aaaprint("Right")
+        forwardm(0.25)
         forward()
+        
         Ldistance, Rdistance, Fdistance = distances()
+        
 
         while int(Fdistance) > 165:
             forward()
