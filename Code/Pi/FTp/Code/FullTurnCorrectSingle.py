@@ -322,7 +322,7 @@ def main():
             Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
             while Ldistance < 100 or Rdistance < 100:
                 forward()
-                # Ldistance, Rdistance, Fdistance = distances()
+                Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
                 print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
                 time.sleep(0.2)
                 if Ldistance + Rdistance > 110:
@@ -339,7 +339,8 @@ def main():
                 giros = giros + 1
                 #aaaprint("Right")
             forward()
-            # Ldistance, Rdistance, Fdistance = distances()
+            Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
+
 
             while int(Fdistance) > 165:
                 forward()
@@ -355,7 +356,7 @@ def main():
             #aaaprint("150")
             
             #aaaprint("Correct time")
-            # Ldistance, Rdistance, Fdistance = distances()
+            Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
             #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
             stop()
             
