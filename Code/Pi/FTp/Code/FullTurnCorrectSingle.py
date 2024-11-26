@@ -135,7 +135,7 @@ def forwardm(distance=1):
 def distance_loop():
     global Ldistance, Rdistance, Fdistance
     while True:
-        Ldistance, Rdistance, Fdistance = distances()
+        Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
         print("L " + str(Ldistance) + " R " + str(Rdistance) + " F " + str(Fdistance))
         time.sleep(0.2)
 
@@ -251,7 +251,7 @@ def distance_loop():
     global Ldistance, Rdistance, Fdistance
     while True:
         with lock:
-            Ldistance, Rdistance, Fdistance = distances()
+            Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
             print("L " + str(Ldistance) + " R " + str(Rdistance) + " F " + str(Fdistance))
             time.sleep(0.2)
 
@@ -268,14 +268,14 @@ def turnLeftFull():
     #aaaprint("read")
     forward()
     time.sleep(0.1)
-    Ldistance, Rdistance, Fdistance = distances()
+    Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
     #aaaprint("read done")
     stop()
     #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
 
     while Ldistance + Rdistance > 150:
         forward()
-        Ldistance, Rdistance, Fdistance = distances()
+        Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
         #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
         # forward()        
         time.sleep(0.2)
@@ -296,14 +296,14 @@ def turnRightFull():
     #aaaprint("read")
     forward()
     time.sleep(0.1)
-    Ldistance, Rdistance, Fdistance = distances()
+    Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
     #aaaprint("read done")
     stop()
     #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
 
     while Ldistance + Rdistance > 150:
         forward()
-        Ldistance, Rdistance, Fdistance = distances()
+        Ldistance, Rdistance, Fdistance = L_Loop(), R_Loop(), F_Loop()
         #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
         # forward()        
         time.sleep(0.2)
