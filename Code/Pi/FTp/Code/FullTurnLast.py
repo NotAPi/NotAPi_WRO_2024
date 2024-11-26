@@ -226,15 +226,35 @@ def turnRightFull():
     #aaaprint("Stop")
     time.sleep(0.05)    
     stop()
+
+def checkTime(lastTurn):
+    if time.time() - lastTurn > 15:
+        backward(255)
+        time.sleep(1)
+        if Left:
+            servo(75)
+            forward()
+            time.sleep(0.5)
+        if Right:
+            servo(135)
+            forward()
+            time.sleep(0.5)    
+            
+        servo()
     
 try:
+    Left = 0
+    Right = 0
+    lastTurn = 0
     servo()
     time.sleep(0.05)
     forward()
     giros = 0
     while True:
         Ldistance, Rdistance, Fdistance = distances()
+        lastTurn = time.time()
         while Ldistance < 100 or Rdistance < 100:
+            checkTime(lastTurn)
             forward()
             Ldistance, Rdistance, Fdistance = distances()
             print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
@@ -245,20 +265,23 @@ try:
         
         if Ldistance > Rdistance:
             turnLeftFull()
+            Left = 1
             giros = giros + 1
             #aaaprint("Left")
         
         if Rdistance > Ldistance:
             turnRightFull()
+            Right = 1
             giros = giros + 1
             #aaaprint("Right")
         forwardm(0.25)
         forward()
-        
+        lastTurn = time.time() 
         Ldistance, Rdistance, Fdistance = distances()
         
 
         while int(Fdistance) > 165:
+            checkTime(lastTurn)
             forward()
             Ldistance, Rdistance, Fdistance = distances()
             print("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
@@ -275,21 +298,22 @@ try:
         Ldistance, Rdistance, Fdistance = distances()
         #aaaprint("L " + str(Ldistance) + " R " + str(Rdistance) + " SUM " + str(Ldistance + Rdistance) + " F " + str(Fdistance))
         stop()
-        
-        if Ldistance > Rdistance * 0.9:
-            servo(95)  # Turn left
-            #aaaprint("90")
-        elif Rdistance > Ldistance * 0.9:
-            servo(115)  # Turn right
-            #aaaprint("120")
-        else:
-            servo(105)  # Go straight
-            #aaaprint("105")
+        if abs(Ldistance - Rdistance) > 8:
+            if Ldistance - Rdistance:
+                servo(95)  # Turn left
+                #aaaprint("90")
+            elif Rdistance - Ldistance:
+                servo(115)  # Turn right
+                #aaaprint("120")
+            else:
+                servo()  # Go straight
+                #aaaprint("105")
         forwardm(0.1)
         servo()
     
         for a in range(5):
             print(giros)
+        lastTurn = time.time()
         
     forwardm(0.5)
     stop()
